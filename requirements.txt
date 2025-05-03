@@ -7,4 +7,5 @@ langchain_openai
 langchain-google-genai
 tavily-python
 langchain_community
+PyPDF2
 

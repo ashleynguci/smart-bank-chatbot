@@ -1,6 +1,8 @@
 import os
 import speech_recognition as sr
 import pyttsx3
+import json
+from PyPDF2 import PdfReader
 
 # Read your API key from the environment variable or set it manually
 api_key = os.getenv("GEMINI_API_KEY", "AIzaSyDUnDmE191aoxdYh28OIrfJLSlvplBUG-w")
@@ -21,7 +23,7 @@ graph_builder = StateGraph(State)
 
 # Create LLM class using Gemini API
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
+    model="gemini-2.0-flash-lite",
     temperature=1.0,
     max_tokens=None,
     timeout=None,
@@ -32,9 +34,41 @@ llm = ChatGoogleGenerativeAI(
 # Initialize conversation history
 conversation_history = []
 
+# Function to process PDF files and extract text
+def process_pdf(file_path: str) -> str:
+    try:
+        reader = PdfReader(file_path)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text()
+        return text
+    except Exception as e:
+        print(f"Error processing PDF file: {e}")
+        return ""
+
+# Function to process JSON files and extract content
+def process_json(file_path: str) -> str:
+    try:
+        with open(file_path, "r") as file:
+            data = json.load(file)
+            return json.dumps(data, indent=2)  # Convert JSON to a readable string
+    except Exception as e:
+        print(f"Error processing JSON file: {e}")
+        return ""
+
+# Preprocess files and add their content to the conversation history
+pdf_content = process_pdf("Invoice_ENG.pdf")  # Process the PDF file in the root directory
+json_content = process_json("mockdata.json")  # Process the JSON file in the root directory
+
+if pdf_content:
+    conversation_history.append({"role": "system", "content": f"PDF Content: {pdf_content}"})
+if json_content:
+    conversation_history.append({"role": "system", "content": f"JSON Content: {json_content}"})
+
+prompt = "You are a Chatbot integrated into the Finnish Nordea internet bank. You have access to the user's banking details (loans, cards, invoices) and transaction history. The user interacts with you via voice chat on a mobile app, like Siri. You are a primary point of interaction interface that can access bank services and related information, such as sales, loans and insurance information. Provide factual information based on the Finnish banking system and respond with short messages, not longer than a couple sentences. The user is a young urban professional aiming to make banking services more convenient."
 # Define the chatbot function
 def chatbot(state: State):
-    custom_prompt = {"role": "system", "content": "End all responses with 'Nordea :)'."}
+    custom_prompt = {"role": "system", "content": prompt}
     updated_messages = [custom_prompt] + conversation_history + state["messages"]
     response = llm.invoke(updated_messages)
     conversation_history.extend(state["messages"])
