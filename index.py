@@ -23,9 +23,7 @@ class State(TypedDict):
     # (in this case, it appends messages to the list, rather than overwriting them)
     messages: Annotated[list, add_messages]
 
-
 graph_builder = StateGraph(State)
-
 
 #llm = ChatOpenAI()   # We define our LLM agent here using the OpenAI LLM models, uncomment this to use openai api
 # Create LLM class using gemini api, comment this if you do not use gemini api
@@ -40,7 +38,10 @@ llm = ChatGoogleGenerativeAI(
 
 
 def chatbot(state: State):
-    return {"messages": [llm.invoke(state["messages"])]}
+    # Add a custom system message to guide the model
+    custom_prompt = {"role": "system", "content": "You are a helpful assistant. Answer concisely and accurately."}
+    updated_messages = [custom_prompt] + state["messages"]
+    return {"messages": [llm.invoke(updated_messages)]}
 
 
 # The first argument is the unique node name
