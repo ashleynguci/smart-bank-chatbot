@@ -36,12 +36,19 @@ llm = ChatGoogleGenerativeAI(
     google_api_key=api_key,
 )
 
+# Initialize conversation history
+conversation_history = []
 
 def chatbot(state: State):
     # Add a custom system message to guide the model
-    custom_prompt = {"role": "system", "content": "You are a helpful assistant. Answer concisely and accurately."}
-    updated_messages = [custom_prompt] + state["messages"]
-    return {"messages": [llm.invoke(updated_messages)]}
+    custom_prompt = {"role": "system", "content": "End all responses with 'Nordea :)'."}
+    # Include conversation history in the messages
+    updated_messages = [custom_prompt] + conversation_history + state["messages"]
+    response = llm.invoke(updated_messages)
+    # Update conversation history with the latest user input and response
+    conversation_history.extend(state["messages"])
+    conversation_history.append({"role": "assistant", "content": response.content})  # Access the content attribute
+    return {"messages": [response]}
 
 
 # The first argument is the unique node name
@@ -56,9 +63,16 @@ graph_builder.add_edge("chatbot", END)
 graph = graph_builder.compile()
 
 def stream_graph_updates(user_input: str):
-    for event in graph.stream({"messages": [{"role": "user", "content": user_input}]}):
+    # Add the user input to the conversation history
+    conversation_history.append({"role": "user", "content": user_input})
+    # Pass the updated conversation history to the graph
+    for event in graph.stream({"messages": conversation_history}):
         for value in event.values():
-            print("Assistant:", value["messages"][-1].content)
+            # Extract the assistant's response
+            assistant_message = value["messages"][-1].content
+            print("Assistant:", assistant_message)
+            # Add the assistant's response to the conversation history
+            conversation_history.append({"role": "assistant", "content": assistant_message})
 
 
 while True:
