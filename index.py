@@ -23,7 +23,7 @@ graph_builder = StateGraph(State)
 
 # Create LLM class using Gemini API
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash-lite",
+    model="gemini-2.0-flash",
     temperature=1.0,
     max_tokens=None,
     timeout=None,
@@ -65,7 +65,7 @@ if pdf_content:
 if json_content:
     conversation_history.append({"role": "system", "content": f"JSON Content: {json_content}"})
 
-prompt = "You are a Chatbot integrated into the Finnish Nordea internet bank. You have access to the user's banking details (loans, cards, invoices) and transaction history. The user interacts with you via voice chat on a mobile app, like Siri. You are a primary point of interaction interface that can access bank services and related information, such as sales, loans and insurance information. Provide factual information based on the Finnish banking system and respond with short messages, not longer than a couple sentences. The user is a young urban professional aiming to make banking services more convenient."
+prompt = "You are a Chatbot integrated into the Finnish Nordea internet bank. You have access to the user's banking details (loans, cards, invoices) and transaction history. The user interacts with you via voice chat on a mobile app, like Siri. You are a primary point of interaction interface that can access bank services and related information, such as sales, loans and insurance information. Provide factual information based on the Finnish banking system and respond with short messages, not longer than a couple sentences. The user is a young urban professional aiming to make banking services more convenient. Because of recognizing speech, there may be slight speech-to-text inconsistencies and errors. Consider that sometimes user may mean similar-sounding words that fit context better, e.g. play --> pay."
 # Define the chatbot function
 def chatbot(state: State):
     custom_prompt = {"role": "system", "content": prompt}
@@ -109,10 +109,10 @@ def listen_to_user():
         return user_input
     except sr.UnknownValueError:
         print("Sorry, I didn't catch that. Please try again.")
-        return ""
+        return "*inaudible*"  # Replace empty unrecognized speech with "*inaudible*"
     except sr.RequestError:
         print("Sorry, the speech recognition service is down.")
-        return ""
+        return "*inaudible*"  # Replace empty unrecognized speech with "*inaudible*"
 
 # Set up the text-to-speech engine
 engine = pyttsx3.init()
