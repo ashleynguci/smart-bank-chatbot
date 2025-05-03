@@ -1,3 +1,10 @@
-langgraph==0.1.2
-langchain_openai==0.2.0
-langchain_google_genai==0.3.0
+SpeechRecognition
+pyttsx3
+pyaudio
+langgraph
+langsmith
+langchain_openai
+langchain-google-genai
+tavily-python
+langchain_community
+
