@@ -38,3 +38,6 @@ You can view the architecture diagram for the application [here](https://app.dia
 
 - Ensure you have the necessary environment variables configured if required.
 - For additional details, refer to the documentation or contact the project maintainer.
+
+Create .env file: 
+GEMINI_API_KEY=<YOUR API KEY IS HERE>

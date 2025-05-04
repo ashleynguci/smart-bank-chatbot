@@ -5,7 +5,14 @@ import json
 from PyPDF2 import PdfReader
 
 # Read your API key from the environment variable or set it manually
-api_key = os.getenv("GEMINI_API_KEY", "AIzaSyDUnDmE191aoxdYh28OIrfJLSlvplBUG-w")
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise ValueError("Missing GEMINI_API_KEY in environment variables.")
 
 from typing import Annotated
 from typing_extensions import TypedDict
