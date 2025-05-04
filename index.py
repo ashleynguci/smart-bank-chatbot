@@ -1,8 +1,9 @@
 import os
 import speech_recognition as sr
-import pyttsx3
 import json
 from PyPDF2 import PdfReader
+from gtts import gTTS  # Import gTTS for text-to-speech
+import pygame  # Import pygame for audio playback
 
 # Read your API key from the environment variable or set it manually
 from dotenv import load_dotenv
@@ -67,6 +68,10 @@ def process_json(file_path: str) -> str:
 pdf_content = process_pdf("Invoice_ENG.pdf")  # Process the PDF file in the root directory
 json_content = process_json("mockdata.json")  # Process the JSON file in the root directory
 
+print(pdf_content)
+
+print(json_content)
+
 if pdf_content:
     conversation_history.append({"role": "system", "content": f"PDF Content: {pdf_content}"})
 if json_content:
@@ -88,6 +93,32 @@ graph_builder.add_edge(START, "chatbot")
 graph_builder.add_edge("chatbot", END)
 graph = graph_builder.compile()
 
+# Initialize pygame mixer for audio playback
+pygame.mixer.init()
+
+# Function to use gTTS for text-to-speech
+def speak(text: str):
+    try:
+        file_path = "response.mp3"
+        # Wait until playback is complete and unload the file if it is still in use
+        if pygame.mixer.music.get_busy():
+            pygame.mixer.music.stop()
+            pygame.mixer.music.unload()
+
+        # Remove the file if it already exists
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        tts = gTTS(text=text, lang="en")  # Set language to Finnish
+        tts.save(file_path)
+        pygame.mixer.music.load(file_path)  # Load the MP3 file
+        pygame.mixer.music.play()  # Play the MP3 file
+        while pygame.mixer.music.get_busy():  # Wait until playback is finished
+            continue
+        pygame.mixer.music.unload()  # Unload the MP3 file after playback
+    except Exception as e:
+        print(f"Error using gTTS: {e}")
+
 # Function to stream graph updates
 def stream_graph_updates(user_input: str):
     conversation_history.append({"role": "user", "content": user_input})
@@ -96,18 +127,23 @@ def stream_graph_updates(user_input: str):
             assistant_message = value["messages"][-1].content
             print("Assistant:", assistant_message)
             conversation_history.append({"role": "assistant", "content": assistant_message})
-            engine.say(assistant_message)  # Speak the assistant's response
-            engine.runAndWait()
+            speak(assistant_message)
 
 # Function to listen to user's voice input and convert it to text
 def listen_to_user():
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
 
+    # Wait until playback is complete before starting to listen
+    while pygame.mixer.music.get_busy():
+        continue
+
     with microphone as source:
         print("Listening for your input...")
-        recognizer.adjust_for_ambient_noise(source)  # Adjust for ambient noise
-        audio = recognizer.listen(source)  # Listen for audio
+        recognizer.adjust_for_ambient_noise(source, duration=1)  # Adjust for ambient noise
+        recognizer.energy_threshold += 100  # Increase noise threshold for better detection
+        # Increase timeout and phrase_time_limit for longer listening
+        audio = recognizer.listen(source, timeout=20, phrase_time_limit=40)  # Wait up to 20 seconds to start, allow 30 seconds of speech
 
     try:
         print("Recognizing...")
@@ -120,13 +156,13 @@ def listen_to_user():
     except sr.RequestError:
         print("Sorry, the speech recognition service is down.")
         return "*inaudible*"  # Replace empty unrecognized speech with "*inaudible*"
-
-# Set up the text-to-speech engine
-engine = pyttsx3.init()
+    except Exception as e:
+        print(f"Error during recognition: {e}")
+        return "*inaudible*"
 
 # Start the conversation with a greeting
-engine.say("Hello, I'm a smart chatbot from Nordea. May I know your name and what I can help you with today?")
-engine.runAndWait()
+greeting = "Hello, I'm a smart chatbot from Nordea. How can I help you today?"
+speak(greeting)
 
 # Main loop to handle user interaction
 while True:
@@ -134,13 +170,11 @@ while True:
         user_input = listen_to_user()  # Get voice input from user
         if user_input.lower() in ["quit", "exit", "q"]:
             print("Goodbye!")
-            engine.say("Goodbye!")
-            engine.runAndWait()
+            speak("Goodbye!")
             break
 
         stream_graph_updates(user_input)  # Process the input and generate response
     except Exception as e:
         print(f"Error: {e}")
-        engine.say("Sorry, there was an error. Please try again.")
-        engine.runAndWait()
+        speak("Sorry, there was an error. Please try again.")
         break

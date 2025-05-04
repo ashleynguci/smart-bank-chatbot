@@ -9,3 +9,5 @@ tavily-python
 langchain_community
 PyPDF2
 python-dotenv
+gTTS==2.3.2
+pygame
