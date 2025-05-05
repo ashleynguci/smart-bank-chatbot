@@ -1,5 +1,5 @@
 # Smart Bank Chatbot
-
+A conversational AI assistant tailored for smart banking operations.
 ## Getting Started
 
 Follow these steps to set up and run the application:
