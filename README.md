@@ -9,6 +9,10 @@ Follow these steps to set up and run the application:
 Ensure you have the following installed:
 - Python 3.8 or higher
 - `pip` (Python package manager)
+- Create .env file: 
+GEMINI_API_KEY=<YOUR API KEY IS HERE>
+
+🔑 Get your API key from: [Google AI Studio](https://aistudio.google.com/app/apikey)
 
 ### Installation
 
@@ -39,5 +43,3 @@ You can view the architecture diagram for the application [here](https://app.dia
 - Ensure you have the necessary environment variables configured if required.
 - For additional details, refer to the documentation or contact the project maintainer.
 
-Create .env file: 
-GEMINI_API_KEY=<YOUR API KEY IS HERE>
