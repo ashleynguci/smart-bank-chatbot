@@ -18,7 +18,7 @@ GEMINI_API_KEY=<YOUR API KEY IS HERE>
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/smart-bank-chatbot.git
+    git clone https://github.com/ashleynguci/smart-bank-chatbot.git
     cd smart-bank-chatbot
     ```
 
