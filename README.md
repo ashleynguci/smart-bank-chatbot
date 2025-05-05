@@ -37,6 +37,7 @@ python main.py
 ### Architecture Diagram
 
 You can view the architecture diagram for the application [here](https://app.diagrams.net/#G1ShkOgTyzD2159OhETlVVi2dWLEPp1P9n#%7B%22pageId%22%3A%22Q9r7p5uZ6dG9gq3DhXyy%22%7D).
+![Architecture Diagram](diagram.png)
 
 ### Notes
 
