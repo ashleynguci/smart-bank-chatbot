@@ -31,7 +31,7 @@ GEMINI_API_KEY=<YOUR API KEY IS HERE>
 
 Start the application with:
 ```bash
-python index.py
+python main.py
 ```
 
 ### Architecture Diagram

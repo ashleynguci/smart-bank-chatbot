@@ -68,16 +68,14 @@ def process_json(file_path: str) -> str:
 pdf_content = process_pdf("Invoice_ENG.pdf")  # Process the PDF file in the root directory
 json_content = process_json("mockdata.json")  # Process the JSON file in the root directory
 
-print(pdf_content)
 
-print(json_content)
 
 if pdf_content:
     conversation_history.append({"role": "system", "content": f"PDF Content: {pdf_content}"})
 if json_content:
     conversation_history.append({"role": "system", "content": f"JSON Content: {json_content}"})
 
-prompt = "You are a Chatbot integrated into the Finnish Nordea internet bank. You have access to the user's banking details (loans, cards, invoices) and transaction history. The user interacts with you via voice chat on a mobile app, like Siri. You are a primary point of interaction interface that can access bank services and related information, such as sales, loans and insurance information. Provide factual information based on the Finnish banking system and respond with short messages, not longer than a couple sentences. The user is a young urban professional aiming to make banking services more convenient. Because of recognizing speech, there may be slight speech-to-text inconsistencies and errors. Consider that sometimes user may mean similar-sounding words that fit context better, e.g. play --> pay."
+prompt = "You are a Chatbot integrated into the Finnish Nordea internet bank. You have access to the user's banking details (loans, cards, invoices) and transaction history. Please do not read out loud any numbers, only the amount number to pay. Also don't repeat unneeded information if you already mentioned.Also help to count how many days left, Make it smooth conversation. Consider Nordea service. The user interacts with you via voice chat on a mobile app, like Siri. You are a primary point of interaction interface that can access bank services and related information, such as sales, loans and insurance information. Provide factual information based on the Finnish banking system and respond with short messages, not longer than a couple sentences. The user is a young urban professional aiming to make banking services more convenient. Because of recognizing speech, there may be slight speech-to-text inconsistencies and errors. Consider that sometimes user may mean similar-sounding words that fit context better, e.g. play --> pay."
 # Define the chatbot function
 def chatbot(state: State):
     custom_prompt = {"role": "system", "content": prompt}
