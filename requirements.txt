@@ -4,6 +4,7 @@ pyaudio
 langgraph
 langsmith
 langchain_openai
+langchain_tavily
 langchain-google-genai
 tavily-python
 langchain_community

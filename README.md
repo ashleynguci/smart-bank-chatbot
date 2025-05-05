@@ -10,9 +10,14 @@ Ensure you have the following installed:
 - Python 3.8 or higher
 - `pip` (Python package manager)
 - Create .env file: 
+```
 GEMINI_API_KEY=<YOUR API KEY IS HERE>
+TAVILY_API_KEY=<YOUR API KEY IS HERE>
+```
 
-🔑 Get your API key from: [Google AI Studio](https://aistudio.google.com/app/apikey)
+### API Keys 🔑 
+Get your Gemini API key from: [Google AI Studio](https://aistudio.google.com/app/apikey)
+Get your Tavily API key from: [Tavily dashboard](https://app.tavily.com/home)
 
 ### Installation
 
