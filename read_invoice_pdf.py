@@ -650,7 +650,7 @@ def main():
     parser = InvoiceParser(api_key)
     
     # Process an invoice (replace with your PDF path)
-    invoice_data = parser.process_invoice("invoice_ENG.pdf")
+    invoice_data = parser.process_invoice("Invoice_ENG.pdf")
     
     # Pretty print the result
     print(json.dumps(invoice_data, indent=2, ensure_ascii=False))
