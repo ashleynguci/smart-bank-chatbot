@@ -12,3 +12,5 @@ PyPDF2
 python-dotenv
 gTTS==2.3.2
 pygame
+google
+google-genai
