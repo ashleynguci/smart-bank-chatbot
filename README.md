@@ -1,5 +1,6 @@
 # Smart Bank Chatbot
 A conversational AI assistant tailored for smart banking operations built during a weekend Hackathon.
+
 ## Getting Started
 
 Follow these steps to set up and run the application:
@@ -9,14 +10,13 @@ Follow these steps to set up and run the application:
 Ensure you have the following installed:
 - Python 3.8 or higher
 - `pip` (Python package manager)
-- Create .env file: 
-```
-GEMINI_API_KEY=<YOUR API KEY IS HERE>
-TAVILY_API_KEY=<YOUR API KEY IS HERE>
-```
+- **Docker** (For building and deploying the backend API)
+- **Google Cloud SDK** (For deploying to Google Cloud)
+
+Also, ensure you have access to your Google Cloud project.
 
 ### API Keys 🔑 
-Get your Gemini API key from: [Google AI Studio](https://aistudio.google.com/app/apikey)
+Get your Gemini API key from: [Google AI Studio](https://aistudio.google.com/app/apikey)  
 Get your Tavily API key from: [Tavily dashboard](https://app.tavily.com/home)
 
 ### Installation
@@ -32,20 +32,69 @@ Get your Tavily API key from: [Tavily dashboard](https://app.tavily.com/home)
     pip install -r requirements.txt
     ```
 
-### Running the Application
+---
 
-Start the application with:
+## Docker: Build and Deploy Backend API
+
+This section will guide you on how to build and deploy the backend API to **Google Cloud Run** using **Docker**.
+
+### Build the Docker Image
+
+1. **Navigate to the root directory** where the `Dockerfile` is located:
+    ```bash
+    cd smart-bank-chatbot
+    ```
+
+2. **Build the Docker image** using the following command:
+    ```bash
+    docker build -t gcr.io/<your-project-id>/nordea-backend .
+    ```
+
+    - Replace `<your-project-id>` with your actual Google Cloud project ID. This command builds the Docker image as per the `Dockerfile` in your `backend` directory.
+
+---
+
+### Push the Docker Image to Google Cloud
+
+1. **Authenticate your Google Cloud account** (if not done already):
+    ```bash
+    gcloud auth login
+    ```
+
+2. **Set your Google Cloud project**:
+    ```bash
+    gcloud config set project <your-project-id>
+    ```
+
+3. **Push the Docker image to Google Container Registry**:
+    ```bash
+    docker push gcr.io/<your-project-id>/nordea-backend
+    ```
+
+---
+
+### Deploy the Backend API to Google Cloud Run
+
+1. **Deploy the Docker image to Google Cloud Run**:
+    ```bash
+    gcloud run deploy nordea-backend \
+  --image gcr.io/<your-project-id>/nordea-backend \
+  --platform managed \
+  --region europe-north1 \
+  --allow-unauthenticated \
+  --set-env-vars GEMINI_API_KEY=
+    ```
+
+
+### Test the Deployed API
+
+Once the backend API is deployed, you can test the `/chat` API endpoint by sending a **POST** request to it. You can use **Postman** or **curl** for testing.
+
+Example using `curl`:
 ```bash
-python main.py
-```
-
-### Architecture Diagram
-
-You can view the architecture diagram for the application [here](https://app.diagrams.net/#G1ShkOgTyzD2159OhETlVVi2dWLEPp1P9n#%7B%22pageId%22%3A%22Q9r7p5uZ6dG9gq3DhXyy%22%7D).
-![Architecture Diagram](diagram.png)
-
-### Notes
-
-- Ensure you have the necessary environment variables configured if required.
-- For additional details, refer to the documentation or contact the project maintainer.
-
+curl -X 'POST' \
+  'https://<your-service-name>.run.app/chat' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "input": "Hello, do I have any unpaid invoice?"
+}'
