@@ -5,14 +5,18 @@ This script extracts structured information from invoice PDFs using Google's Gem
 with native PDF processing and validates the extracted data using custom validation functions.
 """
 
-import os
-import json
-import re
 import datetime
+import hashlib
 import io
-from typing import Dict, Any, Optional, Callable, TypeVar
+import json
 import logging
+import os
+import re
+
+# https://www.blake2.net/
+from hashlib import blake2b
 from pathlib import Path
+from typing import Dict, Any, Optional, Callable, TypeVar
 
 # For Gemini API with latest SDK (google-genai)
 from google import genai
@@ -104,13 +108,17 @@ class InvoiceParser:
         """
         logger.info(f"Processing PDF with Gemini: {pdf_path}")
 
-        try:
-            # Read the PDF file
-            pdf_path = Path(pdf_path)
-            pdf_data = pdf_path.read_bytes()
+        # Read the PDF file
+        pdf_path = Path(pdf_path)
+        pdf_data = pdf_path.read_bytes()
 
-            # Check file size to determine upload method
-            file_size_mb = len(pdf_data) / (1024 * 1024)  # Size in MB
+        # Check file size to determine upload method
+        file_size_mb = len(pdf_data) / (1024 * 1024)  # Size in MB
+
+        # Calculate checksum for the PDF file
+        pdf_checksum = blake2b(pdf_data, digest_size=16).hexdigest()
+
+        try:
 
             # Prepare prompt for the model
             prompt = """
@@ -156,11 +164,15 @@ class InvoiceParser:
                         response_mime_type="application/json"
                     )
                 )
+
             else:
+
+                # TODO: Not tested yet
+
                 # For larger files, use the File API
                 logger.info("Using File API for large PDF")
 
-                # Upload the file with new SDK format
+                # Upload the file
                 file_io = io.BytesIO(pdf_data)
                 uploaded_file = self.client.files.upload(
                     file=file_io,
@@ -190,14 +202,17 @@ class InvoiceParser:
                 else:
                     logger.warning(f"Could not extract JSON from the model llm text:\n{response.text}.")
                     logger.warning("Returning empty structure.")
-                    extracted_data = self._get_empty_invoice_structure()
+                    extracted_data = self._get_empty_invoice_structure(pdf_checksum)
+
+            # Add PDF checksum
+            extracted_data["pdf_checksum"] = pdf_checksum
 
             return extracted_data
 
         except Exception as e:
             logger.error(f"Error processing PDF with Gemini: {e}")
-            # Return empty structure in case of failure
-            return self._get_empty_invoice_structure()
+            # Return an empty structure in case of failure
+            return self._get_empty_invoice_structure(pdf_checksum)
 
     def _validate_fields(self, extracted_data: Dict[str, Any]) -> tuple[Dict[str, Any], Dict[str, Any]]:
         """
@@ -267,7 +282,7 @@ class InvoiceParser:
 
         return validated_data, validation_errors
 
-    def _get_empty_invoice_structure(self) -> Dict[str, Any]:
+    def _get_empty_invoice_structure(self, pdf_checksum) -> Dict[str, Any]:
         """Return an empty invoice structure with all fields set to null."""
         return {
             "invoice_number": None,
@@ -285,7 +300,8 @@ class InvoiceParser:
             "reference_number": None,
             "payment_terms": None,
             "currency": None,
-            "line_items": []
+            "line_items": [],
+            "pdf_checksum": pdf_checksum,
         }
 
 
