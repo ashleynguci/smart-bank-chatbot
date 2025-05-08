@@ -80,8 +80,6 @@ class InvoiceParser:
             # Step 2: Validate extracted fields
             validated_data, validation_errors = self._validate_fields(extracted_data)
 
-            print(f'{validation_errors = }')
-
             # Step 3: Log validation errors as warnings
             for field, error in validation_errors.items():
                 logger.warning(f"Validation error for {field}: {error}")
