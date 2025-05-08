@@ -265,7 +265,7 @@ class InvoiceParser:
         # Check required fields
         for field in InvoiceParser.REQUIRED_FIELDS:
             if field not in extracted_data.keys():
-                validation_errors[field] = "Required field is missing"
+                validation_errors[field] = "Required field missing"
 
         return validated_data, validation_errors
 
@@ -713,7 +713,7 @@ def main():
     parser = InvoiceParser(api_key)
 
     # Process an invoice (replace with your PDF path)
-    invoice_data = parser.process_invoice("finnish_invoice_missing_iban.pdf")
+    invoice_data = parser.process_invoice("material/finnish_invoice_missing_iban.pdf")
 
     # Pretty print the result
     print(json.dumps(invoice_data, indent=2, ensure_ascii=False))
