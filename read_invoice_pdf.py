@@ -6,7 +6,6 @@ with native PDF processing and validates the extracted data using custom validat
 """
 
 import datetime
-import hashlib
 import io
 import json
 import logging
