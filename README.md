@@ -10,6 +10,7 @@ Follow these steps to set up and run the application:
 Ensure you have the following installed:
 - Python 3.8 or higher
 - `pip` (Python package manager)
+- [Node.js 18.18](https://nodejs.org/en) or later. Consider using `nvm` to switch between `Node.js` versions easily.
 - **Docker** (For building and deploying the backend API)
 - **Google Cloud SDK** (For deploying to Google Cloud)
 
@@ -53,39 +54,58 @@ TAVILY_API_KEY=<YOUR API KEY>
 
 ---
 
-## Docker: Build and Deploy Backend API
+## Docker: Build, Run and Deploy Backend API and Frontend
 
 This section will guide you on how to build and deploy the backend API to **Google Cloud Run** using **Docker**.
 
-### Build the Docker Image
+### Build Docker Images
+
+Replace `<your-project-id>` with your Google Cloud project ID.
 
 1. **Navigate to the root directory**:
     ```bash
     cd smart-bank-chatbot
     ```
 
-2. **Build the Docker image** using the following command:
+2. **Build the Backend Docker image** using the following command:
     ```bash
     docker build -t gcr.io/<your-project-id>/nordea-backend -f backend/Dockerfile .
     ```
 
-    - Replace `<your-project-id>` with your actual Google Cloud project ID. This command builds the Docker image as per the `Dockerfile` in your `backend` directory.
+3. **Build the Frontend Docker image** using the following command:
+    ```bash
+    docker build -t gcr.io/<your-project-id>/nordea-frontend ./frontend
+    ```
 
+Note: In Backend, the entire project is used as the build context, and `-f backend/Dockerfile` means that the nested Dockerfile is used.
+In Frontend, build context is only the `frontend` directory. In the future, consider updating Backend to also have a nested build context.
 ---
 
-### Run the Docker Image (For local development purposes)
-To run the Docker Image locally, use the following command. The API will be exposed at `http://localhost:8000/chat`.
-```
-docker run -p 8000:8080 --name <container-name> gcr.io/<your-project-id>/nordea-backend
-```
-To stop the container, run
-```
-docker stop <container-name>
-```
+### Run the Docker Images (For local development purposes)
+To run the Docker Image locally, use the following commands. 
+The Backend API will be exposed at `http://localhost:8000/chat`,
+and the Frontend will be accessible at `http://localhost:3000/`.
+
+1. Run the backend container
+    ```
+    docker run -p 8000:8080 --name backend gcr.io/<your-project-id>/nordea-backend
+    ```
+
+2. Run the frontend container
+    ```
+    docker run -p 3000:3000 --name frontend gcr.io/chatbot-smart/nordea-frontend
+    ```
+
+The containers should now be accessible through the browser!
+To stop the containers, run
+    ```bash
+    docker stop <container-name>
+    ```
 If you need to remove the container (and perhaps, build it again with changes), run
-```
-docker rm <container-name>
-```
+    ```bash
+    docker rm <container-name>
+    ```
+---
 
 ### Push the Docker Image to Google Cloud
 
@@ -120,7 +140,7 @@ docker rm <container-name>
 
 `--env-vars-file .env.production.yml` may be used to replace `--set-env-vars` later on.
 
-### Test the Deployed API
+### Test the Deployed Backend API
 
 Once the backend API is deployed, you can test the `/chat` API endpoint by sending a **POST** request to it. You can use **Postman** or **curl** for testing.
 
@@ -130,5 +150,5 @@ curl -X 'POST' \
   'https://<your-service-name>.run.app/chat' \
   -H 'Content-Type: application/json' \
   -d '{
-  "message": "Hello, do I have any unpaid invoice?"
+  "message": "Hello, do I have any unpaid invoices?"
 }'
