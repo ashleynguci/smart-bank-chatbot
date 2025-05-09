@@ -30,12 +30,13 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 # .env.production
 NEXT_PUBLIC_API_URL=https://backend-api-xyz.a.run.app
 ```
-Thus, in your development environment (on your local machine), create a `.env` file at the root of the project to store environment variables.
-Inside, define the following variables:
+Thus, in your development environment (on your local machine), create a `/backend/.env` file to store environment variables.
+Inside, define the following:
 ```
 GEMINI_API_KEY=<YOUR API KEY>
 TAVILY_API_KEY=<YOUR API KEY>
 ```
+For now, they only have API keys, but will likely include URL addresses later as well.
 (Potentially, use a --env-vars-file flag later on [Google Cloud - Use environment variables](https://cloud.google.com/workflows/docs/use-environment-variables)) 
 
 ### Installation
@@ -53,9 +54,53 @@ TAVILY_API_KEY=<YOUR API KEY>
 
 ---
 
-## Docker: Build, Run and Deploy Backend API and Frontend
+## Local Development Environment
+To run Docker Images locally and make sure they work together and communicate as intended, we are using Docker Compose.
+It lets us wire services together without needing to manually set up networks, ports, or dependencies.
+However, for Google Cloud Run, Docker Compose will not work. 
+So if you are ready to deploy, follow the **Build and Deploy Backend API and Frontend** instructions instead.
 
-This section will guide you on how to build and deploy the backend API to **Google Cloud Run** using **Docker**.
+To start the local dev environment, run:
+    ```
+    docker-compose up --build
+    ```
+
+Now, the containers are all set up and ready to communicate with one another!
+The Frontend UI is accessible at: `http://localhost:3000/`.
+
+To stop the containers and clean up, run:
+    ```
+    docker-compose down
+    ```
+
+### Run Frontend Server
+For UI development purposes, it is much more handy to use a dev server instead of a container.
+Code changes will be reflected in real time, speeding up development!
+
+To start a hot-reloading dev server on http://localhost:3000, use the following commands:
+
+1. Navigate to the `frontend` folder.
+    ```bash
+    cd frontend
+    ```
+
+2. Install dependencies
+    ```bash
+    npm install
+    ```
+
+3. Launch the development server.
+    ```bash
+    npm run dev
+    ```
+
+To shut down the server, use `Ctrl + C`.
+
+---
+
+## Build and Deploy Backend API and Frontend
+
+This section will guide you on how to build and deploy the Docker containers to **Google Cloud Run**.
 
 ### Build Docker Images
 
@@ -75,33 +120,6 @@ Replace `<your-project-id>` with your Google Cloud project ID.
     ```bash
     docker build -t gcr.io/<your-project-id>/nordea-frontend ./frontend
     ```
-
-### Run the Docker Images (For local development purposes)
-To run the Docker Image locally, use the following commands. 
-The Backend API will be exposed at `http://localhost:8000/chat`,
-and the Frontend will be accessible at `http://localhost:3000/`.
-
-1. Run the backend container
-    ```
-    docker run -p 8000:8080 --name backend gcr.io/<your-project-id>/nordea-backend
-    ```
-
-2. Run the frontend container
-    ```
-    docker run -p 3000:3000 --name frontend gcr.io/<your-project-id>/nordea-frontend
-    ```
-
-The containers should now be accessible through the browser!
-To stop the containers, run
-    ```bash
-    docker stop <container-name>
-    ```
-If you need to remove the container (to perhaps, build it again with changes), run
-    ```bash
-    docker rm <container-name>
-    ```
-
----
 
 ### Push the Docker Image to Google Cloud
 

@@ -6,6 +6,7 @@ import json
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain_google_genai import ChatGoogleGenerativeAI
+from fastapi.middleware.cors import CORSMiddleware
 
 # Load env vars
 load_dotenv()
@@ -15,6 +16,17 @@ if not api_key:
 
 # FastAPI app
 app = FastAPI()
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Not safe for production! Needs to be restricted to our domain.
+    # allow_origins=["http://localhost:3000"] or allow_origins=["https://your-frontend.cloudrun.app"]
+    # origins = [os.getenv("FRONTEND_URL", "http://localhost:3000")]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Init LLM
 llm = ChatGoogleGenerativeAI(
