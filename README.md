@@ -68,16 +68,13 @@ Replace `<your-project-id>` with your Google Cloud project ID.
 
 2. **Build the Backend Docker image** using the following command:
     ```bash
-    docker build -t gcr.io/<your-project-id>/nordea-backend -f backend/Dockerfile .
+    docker build -t gcr.io/<your-project-id>/nordea-backend ./backend
     ```
 
 3. **Build the Frontend Docker image** using the following command:
     ```bash
     docker build -t gcr.io/<your-project-id>/nordea-frontend ./frontend
     ```
-
-Note: In Backend, the entire project is used as the build context, and `-f backend/Dockerfile` means that the nested Dockerfile is used.
-In Frontend, build context is only the `frontend` directory. In the future, consider updating Backend to also have a nested build context.
 
 ### Run the Docker Images (For local development purposes)
 To run the Docker Image locally, use the following commands. 
@@ -99,10 +96,11 @@ To stop the containers, run
     ```bash
     docker stop <container-name>
     ```
-If you need to remove the container (and perhaps, build it again with changes), run
+If you need to remove the container (to perhaps, build it again with changes), run
     ```bash
     docker rm <container-name>
     ```
+
 ---
 
 ### Push the Docker Image to Google Cloud
