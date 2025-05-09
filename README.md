@@ -35,7 +35,6 @@ Inside, define the following variables:
 ```
 GEMINI_API_KEY=<YOUR API KEY>
 TAVILY_API_KEY=<YOUR API KEY>
-
 ```
 (Potentially, use a --env-vars-file flag later on [Google Cloud - Use environment variables](https://cloud.google.com/workflows/docs/use-environment-variables)) 
 
@@ -79,7 +78,6 @@ Replace `<your-project-id>` with your Google Cloud project ID.
 
 Note: In Backend, the entire project is used as the build context, and `-f backend/Dockerfile` means that the nested Dockerfile is used.
 In Frontend, build context is only the `frontend` directory. In the future, consider updating Backend to also have a nested build context.
----
 
 ### Run the Docker Images (For local development purposes)
 To run the Docker Image locally, use the following commands. 
@@ -93,7 +91,7 @@ and the Frontend will be accessible at `http://localhost:3000/`.
 
 2. Run the frontend container
     ```
-    docker run -p 3000:3000 --name frontend gcr.io/chatbot-smart/nordea-frontend
+    docker run -p 3000:3000 --name frontend gcr.io/<your-project-id>/nordea-frontend
     ```
 
 The containers should now be accessible through the browser!
