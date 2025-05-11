@@ -1,0 +1,24 @@
+# Client-side rendering with Next.js
+
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY ./ ./
+# Next.js semantics are tricky, this way we assign .env.development priority.
+COPY .env.development .env.production.local
+
+# Build the static site
+RUN npm install 
+RUN npm run build
+
+# Stage 2: Serve with a lightweight HTTP server
+FROM node:20-alpine
+WORKDIR /app
+
+# Install serve
+RUN npm install -g serve
+
+# Copy build artifacts
+COPY --from=builder /app/out ./out
+
+EXPOSE 3000
+CMD ["serve", "-s", "out", "-l", "3000"]

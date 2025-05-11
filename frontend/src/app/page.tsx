@@ -17,7 +17,8 @@ export default function Home() {
     setError(null);
 
     try {
-      const res = await fetch('http://localhost:8000/chat', {
+      // process.env.NEXT_PUBLIC makes the environment variable available in the browser (it is public)
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -56,14 +56,17 @@ For now, they only have API keys, but will likely include URL addresses later as
 
 ## Local Development Environment
 To run Docker Images locally and make sure they work together and communicate as intended, we are using Docker Compose.
+Docker Compose is included by default in Docker Desktop - you don't need to install it separately.
 It lets us wire services together without needing to manually set up networks, ports, or dependencies.
 However, for Google Cloud Run, Docker Compose will not work. 
 So if you are ready to deploy, follow the **Build and Deploy Backend API and Frontend** instructions instead.
 
-To start the local dev environment, run:
+First, launch Docker and ensure that the Docker Engine is running. Then, to start the local dev environment, run:
     ```
     docker-compose up --build
     ```
+
+The first you run this command, it may take a few minutes to set everything up and running. Subsequent `docker-compose` runs will be much quicker!
 
 Now, the containers are all set up and ready to communicate with one another!
 The Frontend UI is accessible at: `http://localhost:3000/`.
@@ -75,7 +78,7 @@ To stop the containers and clean up, run:
 
 ### Run Frontend Server
 For UI development purposes, it is much more handy to use a dev server instead of a container.
-Code changes will be reflected in real time, speeding up development!
+Code changes will be reflected in real time in the browser whenever you save files, speeding up development!
 
 To start a hot-reloading dev server on http://localhost:3000, use the following commands:
 
@@ -102,6 +105,21 @@ To shut down the server, use `Ctrl + C`.
 
 This section will guide you on how to build and deploy the Docker containers to **Google Cloud Run**.
 
+### Set a Backend API URL Environment Variable
+We want to instruct the deployed Frontend to call a deployed Backend Cloud API instead of `http://localhost:8000`.
+Here, it is assumed that containers have been previously deployed and a link of format `https://<project-link>.a.run.app`
+is reserved for the backend container. If not, deploy the Backend first individually.
+Subsequent deployments do not change the link, so you can immediately provide it to the frontend container:
+
+1. Create a `/frontend/.env.production` file. Do not push this to Git (.gitignore takes care of this)
+
+2. Inside, paste the link to the deployed Backend API container:
+    ```bash
+    NEXT_PUBLIC_API_URL=https://<project-link>.a.run.app
+    ```
+
+3. The Frontend Docker Image builder below will use this link instead of `http://localhost:8000` in `.env.development`. 
+
 ### Build Docker Images
 
 Replace `<your-project-id>` with your Google Cloud project ID.
@@ -118,7 +136,7 @@ Replace `<your-project-id>` with your Google Cloud project ID.
 
 3. **Build the Frontend Docker image** using the following command:
     ```bash
-    docker build -t gcr.io/<your-project-id>/nordea-frontend ./frontend
+    docker build -f Dockerfile.prod -t gcr.io/<your-project-id>/nordea-frontend ./frontend
     ```
 
 ### Push the Docker Image to Google Cloud
@@ -166,3 +184,4 @@ curl -X 'POST' \
   -d '{
   "message": "Hello, do I have any unpaid invoices?"
 }'
+```

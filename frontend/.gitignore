@@ -30,8 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (Only .env.development can be public, as it contains the localhost URL)
 .env*
+!.env.development
 
 # vercel
 .vercel
