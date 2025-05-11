@@ -79,20 +79,29 @@ To stop the containers and clean up, run:
 ### Run Frontend Server
 For UI development purposes, it is much more handy to use a dev server instead of a container.
 Code changes will be reflected in real time in the browser whenever you save files, speeding up development!
+The Frontend container calls the cloud-hosted Backend API to remove the need to constantly rebuild the Backend.
+To ensure that requests are routed correctly:
 
-To start a hot-reloading dev server on http://localhost:3000, use the following commands:
+1. Add a `/frontend/.env.development.local` file
 
-1. Navigate to the `frontend` folder.
+2. Inside, paste the link to the deployed Backend API container:
+    ```bash
+    NEXT_PUBLIC_API_URL=https://<project-link>.a.run.app
+    ```
+
+To start a hot-reloading dev server on `http://localhost:3000`, use the following commands:
+
+3. Navigate to the `frontend` folder.
     ```bash
     cd frontend
     ```
 
-2. Install dependencies
+4. Install dependencies
     ```bash
     npm install
     ```
 
-3. Launch the development server.
+5. Launch the development server.
     ```bash
     npm run dev
     ```
