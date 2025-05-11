@@ -110,24 +110,10 @@ To shut down the server, use `Ctrl + C`.
 
 ---
 
-## Build and Deploy Backend API and Frontend
+## Build and Deploy Backend API
 
-This section will guide you on how to build and deploy the Docker containers to **Google Cloud Run**.
-
-### Set a Backend API URL Environment Variable
-We want to instruct the deployed Frontend to call a deployed Backend Cloud API instead of `http://localhost:8000`.
-Here, it is assumed that containers have been previously deployed and a link of format `https://<project-link>.a.run.app`
-is reserved for the backend container. If not, deploy the Backend first individually.
-Subsequent deployments do not change the link, so you can immediately provide it to the frontend container:
-
-1. Create a `/frontend/.env.production` file. Do not push this to Git (.gitignore takes care of this)
-
-2. Inside, paste the link to the deployed Backend API container:
-    ```bash
-    NEXT_PUBLIC_API_URL=https://<project-link>.a.run.app
-    ```
-
-3. The Frontend Docker Image builder below will use this link instead of `http://localhost:8000` in `.env.development`. 
+This section will guide you on how to build and deploy the Backend API Docker container to **Google Cloud Run**.
+We will first deploy the Backend, and once this is done, we will continue with the Frontend container (see **Build and Deploy Frontend**)
 
 ### Build Docker Images
 
@@ -141,11 +127,6 @@ Replace `<your-project-id>` with your Google Cloud project ID.
 2. **Build the Backend Docker image** using the following command:
     ```bash
     docker build -t gcr.io/<your-project-id>/nordea-backend ./backend
-    ```
-
-3. **Build the Frontend Docker image** using the following command:
-    ```bash
-    docker build -f Dockerfile.prod -t gcr.io/<your-project-id>/nordea-frontend ./frontend
     ```
 
 ### Push the Docker Image to Google Cloud
@@ -194,3 +175,40 @@ curl -X 'POST' \
   "message": "Hello, do I have any unpaid invoices?"
 }'
 ```
+
+## Build and Deploy Frontend
+
+### Set a Backend API URL Environment Variable
+We want to instruct the deployed Frontend to call a deployed Backend Cloud API instead of `http://localhost:8000`.
+Now the Backend is deployed and hosted on a reserved link of format `https://<project-link>.a.run.app`. 
+Subsequent deployments should not change the link.
+Now you can provide the Backend link to the frontend container:
+
+1. Create a `/frontend/.env.production` file. Do not push this to Git (.gitignore takes care of this)
+
+2. Inside, paste the link to the deployed Backend API container:
+    ```bash
+    NEXT_PUBLIC_API_URL=https://<project-link>.a.run.app
+    ```
+
+3. **Build the Frontend Docker image** using the following command:
+    ```bash
+    docker build -f frontend/Dockerfile.prod -t gcr.io/<your-project-id>/nordea-frontend ./frontend
+    ```
+
+4. **Push the Docker image to Google Container Registry**:
+    ```bash
+    docker push gcr.io/<your-project-id>/nordea-frontend
+    ```
+
+5. **Deploy the Docker image to Google Cloud Run**:
+    ```bash
+    gcloud run deploy nordea-frontend \
+    --image gcr.io/<your-project-id>/nordea-frontend \
+    --platform managed \
+    --region europe-north1 \
+    --allow-unauthenticated \
+    --port 3000
+    ```
+
+Note: `--port 3000` is a temporary fix (even though it works). Cloud Run is trying to verify that the container is listening on port 8080 (its default), so this should be reconfigured elsewhere.
