@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { getOrCreateUserId } from "./utils/getUserId";
 
 //import Image from "next/image";
 
@@ -15,15 +16,16 @@ export default function Home() {
   const handleSend = async () => {
     setLoading(true);
     setError(null);
+    const userId = getOrCreateUserId(); // Generates a unique user ID for each session and stores it in sessionStorage.
+    if (!userId) return;
 
     try {
-      // process.env.NEXT_PUBLIC makes the environment variable available in the browser (it is public)
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, { // process.env.NEXT_PUBLIC makes the environment variable available in the browser (it is public)
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ message, userId }),
       });
 
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);

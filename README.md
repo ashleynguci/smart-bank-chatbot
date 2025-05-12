@@ -21,16 +21,9 @@ Get your Gemini API key from: [Google AI Studio](https://aistudio.google.com/app
 Get your Tavily API key from: [Tavily dashboard](https://app.tavily.com/home)
 
 ### Environment Variables
-API keys and URLs are stored as environment variables both due to their personal nature and differences in development/production environments.
-For example, development/production URLs may differ, so hard-coding them is not a good idea:
-```
-# .env.development
-NEXT_PUBLIC_API_URL=http://localhost:8000
-
-# .env.production
-NEXT_PUBLIC_API_URL=https://backend-api-xyz.a.run.app
-```
-Thus, in your development environment (on your local machine), create a `/backend/.env` file to store environment variables.
+API keys and URLs are stored as private environment variables both due to their personal nature and differences in development/production environments.
+For example, development/production URLs may differ, so hard-coding them is not a good idea.
+Thus, in your development environment (on your local machine), create a `/backend/.env` file to store API key environment variables.
 Inside, define the following:
 ```
 GEMINI_API_KEY=<YOUR API KEY>
