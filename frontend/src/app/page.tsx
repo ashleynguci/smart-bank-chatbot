@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { getOrCreateUserId } from "./utils/getUserId";
 
 //import Image from "next/image";
 
@@ -13,11 +12,13 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Generate a unique user ID for each session.
+  // This way, the backend will be able to handle multiple users at the same time.
+  const [userId, setUserId] = useState<string | null>(crypto.randomUUID());
+
   const handleSend = async () => {
     setLoading(true);
     setError(null);
-    const userId = getOrCreateUserId(); // Generates a unique user ID for each session and stores it in sessionStorage.
-    if (!userId) return;
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, { // process.env.NEXT_PUBLIC makes the environment variable available in the browser (it is public)
