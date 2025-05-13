@@ -2,23 +2,21 @@
 A conversational AI assistant tailored for smart banking operations built during a weekend Hackathon.
 
 ## Getting Started
-
 Follow these steps to set up and run the application:
 
 ### Prerequisites
-
 Ensure you have the following installed:
-- Python 3.8 or higher
+- Python 3.8 to 3.13
 - `pip` (Python package manager)
 - [Node.js 18.18](https://nodejs.org/en) or later. Consider using `nvm` to switch between `Node.js` versions easily.
-- **Docker** (For building and deploying the backend API)
-- **Google Cloud SDK** (For deploying to Google Cloud)
+- **Docker** (For building and deploying container images)
+- **Google Cloud SDK** (For deploying to Google Cloud - you don't need to install this to get the project running if you're not planning on deploying)
 
-Also, ensure you have access to your Google Cloud project.
+Also, if you're deploying, ensure you have access to your Google Cloud project.
 
 ### API Keys 🔑 
 Get your Gemini API key from: [Google AI Studio](https://aistudio.google.com/app/apikey)  
-Get your Tavily API key from: [Tavily dashboard](https://app.tavily.com/home)
+Get your Tavily API key from: [Tavily dashboard](https://app.tavily.com/home) (Currently not used yet, so not required)
 
 ### Environment Variables
 API keys and URLs are stored as private environment variables both due to their personal nature and differences in development/production environments.
@@ -29,8 +27,8 @@ Inside, define the following:
 GEMINI_API_KEY=<YOUR API KEY>
 TAVILY_API_KEY=<YOUR API KEY>
 ```
-For now, they only have API keys, but will likely include URL addresses later as well.
-(Potentially, use a --env-vars-file flag later on [Google Cloud - Use environment variables](https://cloud.google.com/workflows/docs/use-environment-variables)) 
+For now, they only have API keys, but will likely include an approved frontend URL address later as well.
+(Potentially, we may use a --env-vars-file flag later on [Google Cloud - Use environment variables](https://cloud.google.com/workflows/docs/use-environment-variables)) 
 
 ### Installation
 
@@ -54,17 +52,17 @@ It lets us wire services together without needing to manually set up networks, p
 However, for Google Cloud Run, Docker Compose will not work. 
 So if you are ready to deploy, follow the **Build and Deploy Backend API and Frontend** instructions instead.
 
-First, launch Docker and ensure that the Docker Engine is running. Then, to start the local dev environment, run:
+First, launch Docker and ensure that the Docker Engine is running. Then, to start the local dev environment, at the root of the project run:
     ```
     docker-compose up --build
     ```
 
-The first you run this command, it may take a few minutes to set everything up and running. Subsequent `docker-compose` runs will be much quicker!
+The first time you run this command, it may take a few minutes to set everything up and running. Subsequent `docker-compose` runs will be much quicker!
 
 Now, the containers are all set up and ready to communicate with one another!
-The Frontend UI is accessible at: `http://localhost:3000/`.
+The Frontend UI is now accessible at: `http://localhost:3000/`.
 
-To stop the containers and clean up, run:
+To stop the containers use `Ctrl + C`, and to clean up, run:
     ```
     docker-compose down
     ```
