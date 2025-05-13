@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 //import Image from "next/image";
 
@@ -15,8 +15,10 @@ export default function Home() {
   // Generate a unique user ID for each session.
   // This way, the backend will be able to handle multiple users at the same time.
   const [userId, setUserId] = useState<string | null>(crypto.randomUUID());
+  const inputRef = useRef<HTMLInputElement>(null); // Create input ref
 
   const handleSend = async () => {
+    if (!message.trim()) return; // prevent sending empty messages
     setLoading(true);
     setError(null);
 
@@ -33,6 +35,7 @@ export default function Home() {
 
       const data = await res.json();
       setResponse(data.response);
+      setMessage(''); // clear input after send
     } catch (err: unknown ) {
       if (err instanceof Error) {
         setError(err.message);
@@ -44,6 +47,17 @@ export default function Home() {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSend();
+    }
+  };
+
+  useEffect(() => {
+    if (response && inputRef.current) {
+      inputRef.current.focus(); // Focus on the input field after receiving a response, so the user can immediately type a new message
+    }
+  }, [response]);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -64,15 +78,18 @@ export default function Home() {
           {error && <p className="text-red-600">Error: {error}</p>}
           <input
             type="text"
+            ref={inputRef} // Focus on text input when response is received
             placeholder="Ask a question..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={loading}
             className="bg-gray-700 border border-gray-400 p-2 rounded text-white"
           />
           <button
             onClick={handleSend}
             disabled={loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
           >
             {loading ? 'Sending...' : 'Send'}
           </button>
