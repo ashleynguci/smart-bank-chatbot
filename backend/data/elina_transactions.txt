@@ -1,0 +1,120 @@
+Amount: €54.17 | Receiver: Lidl | Time: 2024-05-19
+Amount: €27.46 | Receiver: VR Matkalla | Time: 2024-05-20
+Amount: €7.02 | Receiver: Spotify | Time: 2024-05-21
+Amount: €22.02 | Receiver: Alepa | Time: 2024-05-21
+Amount: €4.22 | Receiver: HSL | Time: 2024-05-22
+Amount: €12.32 | Receiver: Netflix | Time: 2024-05-23
+Amount: €32.85 | Receiver: VR Matkalla | Time: 2024-05-25
+Amount: €307.64 | Receiver: Nordnet Investment | Time: 2024-06-05
+Amount: €47.25 | Receiver: Wolt | Time: 2024-06-07
+Amount: €6.06 | Receiver: HSL | Time: 2024-06-07
+Amount: €69.91 | Receiver: Alepa | Time: 2024-06-10
+Amount: €111.84 | Receiver: Gigantti | Time: 2024-06-12
+Amount: €258.61 | Receiver: Amazon.de | Time: 2024-06-20
+Amount: €194.63 | Receiver: Finnair | Time: 2024-06-21
+Amount: €313.14 | Receiver: Nordea Savings | Time: 2024-06-22
+Amount: €13.54 | Receiver: Netflix | Time: 2024-06-26
+Amount: €58.42 | Receiver: Cafe Regatta | Time: 2024-06-30
+Amount: €12.88 | Receiver: Cafe Regatta | Time: 2024-07-02
+Amount: €37.94 | Receiver: Wolt | Time: 2024-07-02
+Amount: €209.07 | Receiver: Amazon.de | Time: 2024-07-08
+Amount: €46.69 | Receiver: Alepa | Time: 2024-07-10
+Amount: €10.73 | Receiver: Wolt | Time: 2024-07-12
+Amount: €32.56 | Receiver: VR Matkalla | Time: 2024-07-13
+Amount: €48.15 | Receiver: Amazon.de | Time: 2024-07-16
+Amount: €23.14 | Receiver: Wolt | Time: 2024-07-18
+Amount: €34.65 | Receiver: HSL | Time: 2024-07-21
+Amount: €188.62 | Receiver: Finnair | Time: 2024-07-29
+Amount: €41.59 | Receiver: Cafe Regatta | Time: 2024-07-31
+Amount: €481.02 | Receiver: Nordnet Investment | Time: 2024-08-02
+Amount: €306.45 | Receiver: Nordnet Investment | Time: 2024-08-02
+Amount: €237.86 | Receiver: Finnair | Time: 2024-08-07
+Amount: €34.56 | Receiver: Wolt | Time: 2024-08-08
+Amount: €36.39 | Receiver: Helsinki Gym | Time: 2024-08-09
+Amount: €32.55 | Receiver: VR Matkalla | Time: 2024-08-11
+Amount: €49.53 | Receiver: Wolt | Time: 2024-08-12
+Amount: €381.91 | Receiver: Nordnet Investment | Time: 2024-08-12
+Amount: €37.56 | Receiver: Amazon.de | Time: 2024-08-16
+Amount: €49.02 | Receiver: Helsinki Gym | Time: 2024-08-19
+Amount: €374.3 | Receiver: Nordea Savings | Time: 2024-08-25
+Amount: €37.34 | Receiver: Yoga Helsinki | Time: 2024-08-25
+Amount: €433.8 | Receiver: Nordnet Investment | Time: 2024-08-25
+Amount: €29.89 | Receiver: S-Market | Time: 2024-08-25
+Amount: €9.83 | Receiver: HSL | Time: 2024-08-25
+Amount: €256.56 | Receiver: Finnair | Time: 2024-09-06
+Amount: €26.26 | Receiver: HSL | Time: 2024-09-10
+Amount: €399.01 | Receiver: Nordea Savings | Time: 2024-09-15
+Amount: €88.96 | Receiver: K-Market | Time: 2024-09-16
+Amount: €71.12 | Receiver: Alepa | Time: 2024-09-20
+Amount: €33.72 | Receiver: VR Matkalla | Time: 2024-09-20
+Amount: €467.01 | Receiver: Nordea Savings | Time: 2024-09-20
+Amount: €9.36 | Receiver: Spotify | Time: 2024-09-20
+Amount: €241.42 | Receiver: Gigantti | Time: 2024-09-21
+Amount: €167.59 | Receiver: Gigantti | Time: 2024-10-03
+Amount: €75.65 | Receiver: Lidl | Time: 2024-10-17
+Amount: €98.43 | Receiver: Gigantti | Time: 2024-10-22
+Amount: €8.61 | Receiver: Netflix | Time: 2024-10-23
+Amount: €8.07 | Receiver: Netflix | Time: 2024-10-30
+Amount: €33.15 | Receiver: VR Matkalla | Time: 2024-10-31
+Amount: €4.08 | Receiver: HSL | Time: 2024-11-02
+Amount: €29.63 | Receiver: K-Market | Time: 2024-11-02
+Amount: €9.45 | Receiver: Spotify | Time: 2024-11-03
+Amount: €187.14 | Receiver: Amazon.de | Time: 2024-11-04
+Amount: €24.61 | Receiver: Cafe Regatta | Time: 2024-11-07
+Amount: €28.77 | Receiver: Lidl | Time: 2024-11-11
+Amount: €94.57 | Receiver: Amazon.de | Time: 2024-11-17
+Amount: €48.41 | Receiver: Yoga Helsinki | Time: 2024-11-26
+Amount: €37.72 | Receiver: Yoga Helsinki | Time: 2024-12-02
+Amount: €72.83 | Receiver: K-Market | Time: 2024-12-05
+Amount: €206.73 | Receiver: Gigantti | Time: 2024-12-05
+Amount: €10.57 | Receiver: Wolt | Time: 2024-12-06
+Amount: €27.83 | Receiver: Helsinki Gym | Time: 2024-12-15
+Amount: €47.01 | Receiver: K-Market | Time: 2024-12-24
+Amount: €54.58 | Receiver: Cafe Regatta | Time: 2024-12-25
+Amount: €436.03 | Receiver: Nordea Savings | Time: 2024-12-25
+Amount: €260.46 | Receiver: Finnair | Time: 2024-12-26
+Amount: €69.3 | Receiver: Lidl | Time: 2024-12-27
+Amount: €121.52 | Receiver: Finnair | Time: 2025-01-02
+Amount: €402.9 | Receiver: Nordnet Investment | Time: 2025-01-09
+Amount: €434.43 | Receiver: Nordnet Investment | Time: 2025-01-15
+Amount: €74.27 | Receiver: S-Market | Time: 2025-01-16
+Amount: €21.31 | Receiver: Cafe Regatta | Time: 2025-01-18
+Amount: €115.66 | Receiver: Finnair | Time: 2025-01-18
+Amount: €60.83 | Receiver: K-Market | Time: 2025-01-19
+Amount: €27.42 | Receiver: Lidl | Time: 2025-01-20
+Amount: €26.76 | Receiver: Wolt | Time: 2025-01-21
+Amount: €52.32 | Receiver: Lidl | Time: 2025-01-24
+Amount: €23.31 | Receiver: HSL | Time: 2025-01-29
+Amount: €21.68 | Receiver: Alepa | Time: 2025-02-02
+Amount: €61.06 | Receiver: K-Market | Time: 2025-02-12
+Amount: €400.01 | Receiver: Nordnet Investment | Time: 2025-02-21
+Amount: €25.83 | Receiver: K-Market | Time: 2025-02-25
+Amount: €197.24 | Receiver: Finnair | Time: 2025-02-27
+Amount: €62.1 | Receiver: Finnair | Time: 2025-03-02
+Amount: €29.82 | Receiver: Wolt | Time: 2025-03-04
+Amount: €7.79 | Receiver: Netflix | Time: 2025-03-16
+Amount: €51.76 | Receiver: Finnair | Time: 2025-03-21
+Amount: €20.4 | Receiver: Wolt | Time: 2025-03-22
+Amount: €43.85 | Receiver: S-Market | Time: 2025-03-23
+Amount: €34.19 | Receiver: Alepa | Time: 2025-03-31
+Amount: €142.62 | Receiver: Finnair | Time: 2025-04-01
+Amount: €46.73 | Receiver: Wolt | Time: 2025-04-05
+Amount: €52.9 | Receiver: K-Market | Time: 2025-04-08
+Amount: €8.72 | Receiver: Netflix | Time: 2025-04-12
+Amount: €6.18 | Receiver: VR Matkalla | Time: 2025-04-13
+Amount: €16.53 | Receiver: VR Matkalla | Time: 2025-04-17
+Amount: €32.09 | Receiver: Helsinki Gym | Time: 2025-04-17
+Amount: €52.07 | Receiver: Alepa | Time: 2025-04-19
+Amount: €35.38 | Receiver: Yoga Helsinki | Time: 2025-04-23
+Amount: €273.78 | Receiver: Finnair | Time: 2025-04-29
+Amount: €57.87 | Receiver: S-Market | Time: 2025-05-01
+Amount: €50.14 | Receiver: Alepa | Time: 2025-05-01
+Amount: €52.88 | Receiver: Yoga Helsinki | Time: 2025-05-05
+Amount: €54.98 | Receiver: Cafe Regatta | Time: 2025-05-06
+Amount: €27.67 | Receiver: Lidl | Time: 2025-05-08
+Amount: €13.88 | Receiver: Netflix | Time: 2025-05-10
+Amount: €46.12 | Receiver: Helsinki Gym | Time: 2025-05-11
+Amount: €31.98 | Receiver: Amazon.de | Time: 2025-05-11
+Amount: €37.0 | Receiver: Lidl | Time: 2025-05-12
+Amount: €141.9 | Receiver: Amazon.de | Time: 2025-05-12
+Amount: €33.01 | Receiver: HSL | Time: 2025-05-15

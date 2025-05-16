@@ -1,0 +1,138 @@
+{
+  "persona": {
+    "name": "Elina Example",
+    "age": 29,
+    "location": "Helsinki, Finland",
+    "living_situation": "Renting a 1-bedroom apartment in Kallio",
+    "education": "MSc in Machine Learning \u2013 Aalto University",
+    "occupation": "AI Consultant",
+    "monthly_income_eur": 4500,
+    "financial_goals": [
+      "Start investing seriously",
+      "Pay off student loan",
+      "Save for buying an apartment"
+    ]
+  },
+  "accounts": {
+    "checking_account": {
+      "provider": "OP Financial Group",
+      "balance": 3200
+    },
+    "savings_account": {
+      "provider": "Nordea High-Interest Savings",
+      "balance": 11500
+    },
+    "student_loan": {
+      "provider": "Kela",
+      "balance": 6800
+    },
+    "credit_card": {
+      "provider": "Bank Norwegian",
+      "balance": 1200,
+      "limit": 3000,
+      "interest_rate": "19.99%"
+    },
+    "investment_account": {
+      "provider": "Nordnet",
+      "balance": 4200
+    },
+    "monthly_rent": 950
+  },
+  "income": {
+    "monthly_salary": 4500,
+    "bonuses": 2000,
+    "side_income": 1500
+  },
+  "loan_details": {
+    "student_loan": {
+      "source": "Kela",
+      "remaining_balance": 6800,
+      "monthly_payment": 160,
+      "interest_rate": "0.50%"
+    }
+  },
+  "spending": {
+    "monthly_average": {
+      "rent": 950,
+      "groceries": 350,
+      "transportation": 65,
+      "eating_out": 180,
+      "subscriptions": 75,
+      "travel": 250,
+      "tech_gadgets": 90,
+      "health_fitness": 55,
+      "savings_investments": 700,
+      "miscellaneous": 100
+    }
+  },
+  "invoices": [
+    {
+      "client": "AI Nordic Summit",
+      "description": "Speaker Fee",
+      "amount": 800,
+      "month": "March",
+      "status": "Paid"
+    },
+    {
+      "client": "Aalto Executive Education",
+      "description": "AI Workshop Facilitation",
+      "amount": 1200,
+      "month": "June",
+      "status": "Paid"
+    },
+    {
+      "client": "Reaktor",
+      "description": "ML Code Review Workshop",
+      "amount": 950,
+      "month": "September",
+      "status": "Paid"
+    },
+    {
+      "client": "Futurice",
+      "description": "Weekend Training Session",
+      "amount": 600,
+      "month": "November",
+      "status": "Pending"
+    }
+  ],
+  "investments": [
+    {
+      "type": "ETF",
+      "instrument": "iShares MSCI World",
+      "value": 2500,
+      "allocation": "60%"
+    },
+    {
+      "type": "ESG Stocks",
+      "instrument": "Neste, Vestas",
+      "value": 1200,
+      "allocation": "30%"
+    },
+    {
+      "type": "Finnish Bonds",
+      "instrument": "Korkotuotto 2027",
+      "value": 500,
+      "allocation": "10%"
+    }
+  ],
+  "property": {
+    "currently_renting": true,
+    "rent_price": 950,
+    "savings_target": 30000,
+    "interest_areas": [
+      "K\u00e4pyl\u00e4",
+      "Lauttasaari"
+    ]
+  },
+  "yearly_summary": {
+    "income_eur": 54000,
+    "freelance_income_eur": 3550,
+    "expenses": {
+      "rent": 11400,
+      "other_expenses": 18000,
+      "savings_investments": 8400,
+      "loan_repayment": 1920
+    },
+    "net_surplus": 17800
+  }
+}

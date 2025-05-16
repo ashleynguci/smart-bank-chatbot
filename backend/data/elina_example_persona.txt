@@ -1,0 +1,38 @@
+Persona: Elina Example
+Age: 29
+Location: Helsinki, Finland
+Occupation: AI Consultant
+Monthly Net Income: €3,000
+
+Elina values good food, self-care, and the occasional weekend getaway. She’s got subscriptions to Spotify and Netflix, takes public transport everywhere, and sets aside time (and money) for yoga and gym classes. She budgets responsibly, but she’s not stingy — she enjoys sushi nights and café work sessions. She’s not looking for luxury — just independence and stability.
+
+Accounts:
+- Bank account: €14,700
+- Credit Card: €1,200 
+- Investment: €4,200
+- Student Loan (Kela): €6,800
+
+Monthly Spending (Average):
+- Rent: €950
+- Groceries: €350
+- Transportation (HSL): €65
+- Eating Out: €180
+- Subscriptions: €30
+- Travel: €250
+- Health & Fitness: €55
+- Savings/Investments: €500
+- Miscellaneous: €200
+
+Investments:
+- iShares MSCI World ETF: €2,500 (60%)
+- Neste, Vestas ESG Stocks: €1,200 (30%)
+- Finnish Bonds (Korkotuotto 2027): €500 (10%)
+
+Property:
+- Renting 1-bedroom apartment in Kallio (€950/month)
+- Saving €30,000 for apartment in Käpylä or Lauttasaari
+
+Yearly Summary:
+- Net Salary: €36,000
+- Expenses (incl. rent): ~€30,960
+- Net Surplus: ~€5040
