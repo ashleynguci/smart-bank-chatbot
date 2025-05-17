@@ -54,17 +54,17 @@ So if you are ready to deploy, follow the **Build and Deploy Backend API and Fro
 
 First, launch Docker and ensure that the Docker Engine is running. Then, to start the local dev environment, at the root of the project run:
     ```
-    docker-compose up --build
+    docker compose up --build
     ```
 
-The first time you run this command, it may take a few minutes to set everything up and running. Subsequent `docker-compose` runs will be much quicker!
+The first time you run this command, it may take a few minutes to set everything up and running. Subsequent `docker compose` runs will be much quicker!
 
 Now, the containers are all set up and ready to communicate with one another!
 The Frontend UI is now accessible at: `http://localhost:3000/`.
 
 To stop the containers use `Ctrl + C`, and to clean up, run:
     ```
-    docker-compose down
+    docker compose down
     ```
 
 ### Run Frontend Server

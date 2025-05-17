@@ -27,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="fixed w-full flex justify-center">Nordea</header>
+        <header className="w-full flex justify-center fixed max-h-full">Nordea (header)</header>
         {children}
       </body>
     </html>
