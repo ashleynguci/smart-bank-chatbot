@@ -30,12 +30,18 @@ export default function Home() {
   // Message log ref - used to scroll the message log to the bottom when a new message is added.
   const messageLogRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = async (textOverride?: string) => {
+  const handleSend = async (audio: boolean, textOverride?: string) => {
+
+    // Prevent sending empty messages
+    if (!textOverride && !message.trim()) return;
+    
+    setLastMessageIsAudio(audio);
+
+    // Set message to the text override if provided. Otherwise, current message is used.
     if (textOverride) {
       setMessage(textOverride);
-      setLastMessageIsAudio(false); // handleSend is called without arguments when recording audio
-    } // Set message to the text override if provided. Otherwise, current message is used.
-    if (!textOverride && !message.trim()) return; // prevent sending empty messages
+    }
+
     setLoading(true);
     setError(null);
 
@@ -48,7 +54,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message, userId }),
+        body: JSON.stringify({ message, userId, audio }),
       });
 
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -69,8 +75,7 @@ export default function Home() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setLastMessageIsAudio(false);
-      handleSend();
+      handleSend(false);
     }
   };
 
@@ -130,9 +135,8 @@ export default function Home() {
   useEffect(() => {
     if (!listening && transcript && !listeningCancelled) {
       setListeningMessage(null);
-      setLastMessageIsAudio(true);
       setMessage(transcript); // Set the message to the transcript
-      handleSend();           // Send the message
+      handleSend(true);           // Send the message
       resetTranscript();      // Clear the transcript
     }
     else if (listening) {
@@ -217,7 +221,7 @@ export default function Home() {
               className="bg-Nordea-light-grey pl-4 lg:w-80 pr-14 rounded-full text-Nordea-text-dark-blue disabled:opacity-50"
             />
             <button
-              onClick={() => handleSend(message)}
+              onClick={() => handleSend(false, message)}
               disabled={loading}
               className="bg-transparent text-white rounded-full -ml-11 hover:bg-Nordea-light-blue-2 disabled:opacity-50 cursor-pointer"
             >

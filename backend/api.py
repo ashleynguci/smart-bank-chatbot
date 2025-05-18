@@ -181,6 +181,7 @@ document_context = []
 class ChatInput(BaseModel):
     message: str
     userId: str
+    audio: bool
 
 # PDF/JSON preprocessing — optional for now
 def process_pdf(file_path: str) -> str:
@@ -215,5 +216,6 @@ def chat_endpoint(chat_input: ChatInput):
     print("User:", chat_input)
     user_message = chat_input.message
     user_id = chat_input.userId
+    audio = chat_input.audio
     reply = stream_graph_updates(user_message, user_id)
     return {"response": reply}
