@@ -153,20 +153,6 @@ Replace `<your-project-id>` with your Google Cloud project ID.
 
 `--env-vars-file .env.production.yml` may be used to replace `--set-env-vars` later on.
 
-### Test the Deployed Backend API
-
-Once the backend API is deployed, you can test the `/chat` API endpoint by sending a **POST** request to it. You can use **Postman** or **curl** for testing.
-
-Example using `curl`:
-```bash
-curl -X 'POST' \
-  'https://<your-service-name>.run.app/chat' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "message": "Hello, do I have any unpaid invoices?"
-}'
-```
-
 ## Build and Deploy Frontend
 
 ### Set a Backend API URL Environment Variable

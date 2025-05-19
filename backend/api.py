@@ -217,5 +217,28 @@ def chat_endpoint(chat_input: ChatInput):
     user_message = chat_input.message
     user_id = chat_input.userId
     audio = chat_input.audio
-    reply = stream_graph_updates(user_message, user_id)
-    return {"response": reply}
+
+    # Link and attachment messages are not added to memory, AI won't be aware of them yet.
+    if (user_message == "link"):
+        return { 
+          "response": [
+            { "type": "text", "content": "Based on ASP loan terms, " },
+            { "type": "link", "url": "https://www.nordea.fi/en/personal/our-services/loans/home-loans/asploan.html#faq=Frequently-asked-questions-about-ASP-loans+496407", "label": "(📄 Nordea - ASP loan)" },
+            { "type": "text", "content": "The saving period for an ASP loan is a minimum of two years. Let me know if you need anything else." }
+          ]
+        }
+    elif (user_message == "attachment"):
+        return { 
+          "response": [
+            { "type": "text", "content": "You have 1 unpaid invoice from SlicedInvoices: " },
+            { "type": "attachment", "url": "https://slicedinvoices.com/pdf/wordpress-pdf-invoice-plugin-sample.pdf", "label": "Open Invoice PDF" },
+            { "type": "text", "content": "The due date is this Wednesday, and the sum is 93.50€." }
+          ]
+        }      
+    else:
+        reply = stream_graph_updates(user_message, user_id)
+        return {
+          "response": [
+            { "type": "text", "content": reply },
+          ]
+        }

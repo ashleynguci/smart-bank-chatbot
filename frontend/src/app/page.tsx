@@ -8,9 +8,15 @@ import { useIsMobile } from './useIsMobile'; // Custom hook to check if the devi
 // This is the home page of the application. This is React code with TypeScript enabled and Tailwind CSS.
 // Tailwind CSS makes it easy to style the UI by using breakpoints to form a mobile-first, responsive layout with inline styles. 
 
+type MessageContentBlock =
+  | { type: 'text'; content: string }
+  | { type: 'link'; url: string; label: string }
+  | { type: 'attachment'; url: string; label: string }
+  // Add more as needed
+
 type Message = {
   sender: 'User' | 'Assistant';
-  text: string;
+  content: MessageContentBlock[];
 };
 
 export default function Home() {
@@ -47,7 +53,12 @@ export default function Home() {
     setError(null);
 
     // Add user message to log
-    setMessages((prev) => [...prev, { sender: 'User', text: message }]);
+    const userMessage: Message = {
+      sender: 'User',
+      content: [{ type: 'text', content: message }],
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
 
     try {
       const startTime = Date.now();
@@ -66,7 +77,12 @@ export default function Home() {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
       const data = await res.json();
-      setMessages((prev) => [...prev, { sender: 'Assistant', text: data.response }]);
+      const assistantMessage: Message = {
+        sender: 'Assistant',
+        content: data.response,
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
       setMessage(''); // clear input after send
     } catch (err: unknown ) {
       if (err instanceof Error) {
@@ -195,22 +211,44 @@ export default function Home() {
             }}
           >
             {messages.map((msg, idx) => (
-              <Fragment key={idx+'Nia'}>
+              <Fragment key={idx + 'Msg'}>
                 <div
-                  key={idx}
-                  className={`py-3 px-4 rounded-t-3xl ${
+                  className={`py-3 px-4 rounded-t-3xl whitespace-pre-wrap ${
                     msg.sender === 'User'
                       ? 'bg-Nordea-text-dark-blue text-white self-end rounded-l-3xl ml-3'
                       : 'bg-Nordea-light-blue-1 text-Nordea-text-dark-blue self-start rounded-r-3xl mr-3'
                   }`}
                 >
-                  {msg.text}
+                  {msg.content.map((item, i) => {
+                    switch (item.type) {
+                      case 'text':
+                        return <span key={i}>{item.content}</span>; 
+                      case 'link':
+                        return (
+                          <a
+                            key={i}
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline mx-1"
+                          >
+                            {item.label}
+                          </a>
+                        );
+                      case 'attachment':
+                        return (
+                          <div key={i} className="mt-2 border p-2 rounded bg-white shadow-sm">
+                            📎 <a href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>
+                          </div>
+                        );
+                      default:
+                        return null;
+                    }
+                  })}
                 </div>
-                {msg.sender === 'Assistant' ? 
-                <p className='text-Nordea-text-dark-blue text-sm -mt-2'>
-                  Nia
-                </p>
-                : null}
+                {msg.sender === 'Assistant' ? (
+                  <p className="text-Nordea-text-dark-blue text-sm -mt-2">Nia</p>
+                ) : null}
               </Fragment>
             ))}
           </div>
