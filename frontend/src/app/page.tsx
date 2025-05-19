@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect, Fragment } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { useIsMobile } from './useIsMobile'; // Custom hook to check if the device is mobile
 
 //import Image from "next/image";
 
@@ -49,6 +50,8 @@ export default function Home() {
     setMessages((prev) => [...prev, { sender: 'User', text: message }]);
 
     try {
+      const startTime = Date.now();
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, { // process.env.NEXT_PUBLIC makes the environment variable available in the browser (it is public)
         method: 'POST',
         headers: {
@@ -56,6 +59,9 @@ export default function Home() {
         },
         body: JSON.stringify({ message, userId, audio }),
       });
+
+      const endTime = Date.now();
+      console.log(`Backend request took ${((endTime - startTime) / 1000).toFixed(1)} seconds`);
 
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
@@ -79,8 +85,10 @@ export default function Home() {
     }
   };
 
+  const isMobile = useIsMobile();
+
   useEffect(() => {
-    if (!loading && inputRef.current && !lastMessageIsAudio) {
+    if (!isMobile && !loading && inputRef.current && !lastMessageIsAudio) {
       inputRef.current.focus(); // Focus on the input field after receiving a response, so the user can immediately type a new message
     }
     // Scroll message log to bottom when messages change
