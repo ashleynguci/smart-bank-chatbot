@@ -218,13 +218,17 @@ def chat_endpoint(chat_input: ChatInput):
     user_id = chat_input.userId
     audio = chat_input.audio
 
+    # These are hardcoded structured response examples.
     # Link and attachment messages are not added to memory, AI won't be aware of them yet.
+    # Refer to this https://python.langchain.com/docs/concepts/structured_outputs/ 
+    # on how to create structured outputs with Langchain/LangGraph.
+    
     if (user_message == "link"):
         return { 
           "response": [
-            { "type": "text", "content": "Based on ASP loan terms, " },
-            { "type": "link", "url": "https://www.nordea.fi/en/personal/our-services/loans/home-loans/asploan.html#faq=Frequently-asked-questions-about-ASP-loans+496407", "label": "(📄 Nordea - ASP loan)" },
-            { "type": "text", "content": "The saving period for an ASP loan is a minimum of two years. Let me know if you need anything else." }
+            { "type": "text", "content": "Based on ASP loan terms " },
+            { "type": "link", "url": "https://www.nordea.fi/en/personal/our-services/loans/home-loans/asploan.html#faq=Frequently-asked-questions-about-ASP-loans+496407", "label": "Nordea - ASP loan" },
+            { "type": "text", "content": ", The saving period for an ASP loan is a minimum of two years. Let me know if you need anything else." }
           ]
         }
     elif (user_message == "attachment"):
