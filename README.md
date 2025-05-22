@@ -58,7 +58,7 @@ First, launch Docker and ensure that the Docker Engine is running. Then, to star
     ```
 or
     ```
-    docker compose up --build
+    docker compose -f 'docker-compose.yml' up -d --build
     ```
     The first time you run this command, it may take a few minutes to set everything up and running. Subsequent `docker compose` runs will be much quicker!
 
