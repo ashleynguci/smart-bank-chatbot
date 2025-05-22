@@ -21,6 +21,9 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
+from gtts import gTTS
+import base64
+from io import BytesIO
 
 # Load env vars
 load_dotenv()
@@ -210,6 +213,14 @@ if pdf_content:
 if json_content:
     document_context.append({"role": "system", "content": f"JSON Content: {json_content}"})
 
+def text_to_base64_audio(text: str, lang: str = "en") -> str:
+    tts = gTTS(text=text, lang=lang)
+    audio_fp = BytesIO()
+    tts.write_to_fp(audio_fp)
+    audio_fp.seek(0)
+    audio_bytes = audio_fp.read()
+    return base64.b64encode(audio_bytes).decode("utf-8")
+
 # Endpoint
 @app.post("/chat")
 def chat_endpoint(chat_input: ChatInput):
@@ -241,8 +252,16 @@ def chat_endpoint(chat_input: ChatInput):
         }      
     else:
         reply = stream_graph_updates(user_message, user_id)
-        return {
-          "response": [
+        response = [
             { "type": "text", "content": reply },
-          ]
+        ]
+        if audio:
+            audio_base64 = text_to_base64_audio(reply)
+            response.append({
+                "type": "audio",
+                "content": audio_base64,
+                "format": "mp3"
+            })
+        return {
+            "response": response
         }
