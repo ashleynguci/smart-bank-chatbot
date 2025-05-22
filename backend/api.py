@@ -24,10 +24,14 @@ from langgraph.graph.message import add_messages
 from gtts import gTTS
 import base64
 from io import BytesIO
+from google.cloud import texttospeech
 
 # Load env vars
 load_dotenv()
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
 api_key = os.getenv("GEMINI_API_KEY")
+
 if not api_key:
     raise ValueError("Missing GEMINI_API_KEY in environment variables.")
 
@@ -213,13 +217,29 @@ if pdf_content:
 if json_content:
     document_context.append({"role": "system", "content": f"JSON Content: {json_content}"})
 
-def text_to_base64_audio(text: str, lang: str = "en") -> str:
-    tts = gTTS(text=text, lang=lang)
-    audio_fp = BytesIO()
-    tts.write_to_fp(audio_fp)
-    audio_fp.seek(0)
-    audio_bytes = audio_fp.read()
-    return base64.b64encode(audio_bytes).decode("utf-8")
+# def text_to_base64_audio(text: str, lang: str = "en") -> str:
+#     tts = gTTS(text=text, lang=lang)
+#     audio_fp = BytesIO()
+#     tts.write_to_fp(audio_fp)
+#     audio_fp.seek(0)
+#     audio_bytes = audio_fp.read()
+#     return base64.b64encode(audio_bytes).decode("utf-8")
+
+def text_to_base64_audio(text: str, lang: str = "en-US") -> str:
+    client = texttospeech.TextToSpeechClient()
+    synthesis_input = texttospeech.SynthesisInput(text=text)
+    voice = texttospeech.VoiceSelectionParams(
+        language_code=lang,
+        name="en-US-Chirp3-HD-Achernar", # Try other voices as well!
+        ssml_gender=texttospeech.SsmlVoiceGender.FEMALE,
+    )
+    audio_config = texttospeech.AudioConfig(
+        audio_encoding=texttospeech.AudioEncoding.MP3
+    )
+    response = client.synthesize_speech(
+        input=synthesis_input, voice=voice, audio_config=audio_config
+    )
+    return base64.b64encode(response.audio_content).decode("utf-8")
 
 # Endpoint
 @app.post("/chat")

@@ -1,3 +1,4 @@
 .env*
 response.mp3
 notes.txt
+text-to-speech-credentials.json
