@@ -301,21 +301,22 @@ export default function Home() {
               className="bg-Nordea-light-grey pl-4 lg:w-80 pr-14 rounded-full text-Nordea-text-dark-blue disabled:opacity-50"
             />
             <button
-              onClick={() => handleSend(false, message)}
-              disabled={loading}
-              className="bg-transparent text-white rounded-full -ml-11 hover:bg-Nordea-light-blue-2 disabled:opacity-50 cursor-pointer"
+              onClick={() => handleMicrophoneClick()}
+              className={`rounded-full -ml-11 cursor-pointer ${
+                listening ? 'bg-Nordea-green' : 'bg-transparent md:hover:bg-Nordea-light-blue-2'
+              }`}
             >
               {/* {loading ? 'Send' : 'Send'} {/* {loading ? 'Sending...' : 'Send'} */} 
-              <svg className="fill-Nordea-text-dark-blue w-11 p-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M12.627 8.75H0.5V7.25H12.627L6.93075 1.55375L8 0.5L15.5 8L8 15.5L6.93075 14.4462L12.627 8.75Z"/></svg>
+              <svg className={`${listening ? 'fill-white' : 'fill-Nordea-text-dark-blue'} w-11 p-2`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><path d="M22 24.6999C20.7424 24.6999 19.678 24.2643 18.8068 23.3931C17.9356 22.5219 17.5 21.4575 17.5 20.1999V9.3999C17.5 8.1423 17.9356 7.0779 18.8068 6.2067C19.678 5.3355 20.7424 4.8999 22 4.8999C23.2576 4.8999 24.322 5.3355 25.1932 6.2067C26.0644 7.0779 26.5 8.1423 26.5 9.3999V20.1999C26.5 21.4575 26.0644 22.5219 25.1932 23.3931C24.322 24.2643 23.2576 24.6999 22 24.6999ZM20.65 37.7499V31.8167C17.68 31.4774 15.2125 30.2036 13.2475 27.9953C11.2825 25.7866 10.3 23.1882 10.3 20.1999H13C13 22.6899 13.8775 24.8124 15.6325 26.5674C17.3875 28.3224 19.51 29.1999 22 29.1999C24.49 29.1999 26.6125 28.3224 28.3675 26.5674C30.1225 24.8124 31 22.6899 31 20.1999H33.7C33.7 23.1882 32.7175 25.7866 30.7525 27.9953C28.7875 30.2036 26.32 31.4774 23.35 31.8167V37.7499H20.65Z"/></svg>
             </button>
             </div>
               <button 
-              className={`rounded-full md:hover:bg-Nordea-accent-blue cursor-pointer ${
-                listening ? 'bg-Nordea-green' : 'bg-Nordea-text-dark-blue'
-              }`}
-              onClick={() => handleMicrophoneClick()}
+              onClick={() => handleSend(false, message)}
+              disabled={loading}
+              className="bg-Nordea-text-dark-blue text-white rounded-full hover:bg-Nordea-accent-blue disabled:opacity-50 cursor-pointer"
               >
-              <svg className="fill-white w-11 p-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><path d="M22 24.6999C20.7424 24.6999 19.678 24.2643 18.8068 23.3931C17.9356 22.5219 17.5 21.4575 17.5 20.1999V9.3999C17.5 8.1423 17.9356 7.0779 18.8068 6.2067C19.678 5.3355 20.7424 4.8999 22 4.8999C23.2576 4.8999 24.322 5.3355 25.1932 6.2067C26.0644 7.0779 26.5 8.1423 26.5 9.3999V20.1999C26.5 21.4575 26.0644 22.5219 25.1932 23.3931C24.322 24.2643 23.2576 24.6999 22 24.6999ZM20.65 37.7499V31.8167C17.68 31.4774 15.2125 30.2036 13.2475 27.9953C11.2825 25.7866 10.3 23.1882 10.3 20.1999H13C13 22.6899 13.8775 24.8124 15.6325 26.5674C17.3875 28.3224 19.51 29.1999 22 29.1999C24.49 29.1999 26.6125 28.3224 28.3675 26.5674C30.1225 24.8124 31 22.6899 31 20.1999H33.7C33.7 23.1882 32.7175 25.7866 30.7525 27.9953C28.7875 30.2036 26.32 31.4774 23.35 31.8167V37.7499H20.65Z"/></svg>
+              
+              <svg className="fill-white w-11 p-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M12.627 8.75H0.5V7.25H12.627L6.93075 1.55375L8 0.5L15.5 8L8 15.5L6.93075 14.4462L12.627 8.75Z"/></svg>
               </button>
           </div>
           <p className='text-Nordea-text-dark-blue opacity-70 text-sm'>{listeningCancelled ? null : listeningMessage}</p> {/* Show whether microphone is ready*/} 
