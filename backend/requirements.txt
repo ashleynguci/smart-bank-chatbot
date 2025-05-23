@@ -20,3 +20,4 @@ python-dotenv
 pyttsx3
 tavily-python
 uvicorn
+google-cloud-texttospeech
