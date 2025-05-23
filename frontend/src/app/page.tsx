@@ -1,7 +1,10 @@
 'use client';
 import React, { useState, useRef, useEffect, Fragment } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
 import { useIsMobile } from './useIsMobile'; // Custom hook to check if the device is mobile
+import { useLanguage } from './context/LanguageContext'
+import { translations } from './lib/translations'; // Import translations for different languages
 
 //import Image from "next/image";
 
@@ -27,6 +30,13 @@ export default function Home() {
   const [listeningMessage, setListeningMessage] = useState<string | null>(null);
   const [listeningCancelled, setListeningCancelled] = useState(false);
   const [lastMessageIsAudio, setLastMessageIsAudio] = useState(false);
+
+  const { language } = useLanguage();
+  const t = translations[language as 'EN' | 'FI'];
+  const languageLocaleMap = {
+    EN: 'en-US',
+    FI: 'fi-FI',
+  };
 
   // Generate a unique user ID for each session.
   // This way, the backend will be able to handle multiple users at the same time.
@@ -63,6 +73,8 @@ export default function Home() {
 
     setMessages((prev) => [...prev, userMessage]);
 
+    const langCode = languageLocaleMap[language as 'EN' | 'FI'];
+
     try {
       const startTime = Date.now();
 
@@ -71,7 +83,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message, userId, audio }),
+        body: JSON.stringify({ message, userId, audio, langCode }),
       });
 
       const endTime = Date.now();
@@ -181,9 +193,9 @@ export default function Home() {
       resetTranscript();      // Clear the transcript
     }
     else if (listening) {
-      setListeningMessage('Wait...');
+      setListeningMessage(t.micWait);
       setTimeout(() => {
-        setListeningMessage('Listening...');
+        setListeningMessage(t.micSpeak);
       }, 1000);
     }
     else {
@@ -197,9 +209,10 @@ export default function Home() {
 
   const handleMicrophoneClick = () => {
     if (!listening) {
+      const locale = languageLocaleMap[language as 'EN' | 'FI'];
       resetTranscript();
       setListeningCancelled(false);
-      SpeechRecognition.startListening({ continuous: true, language: 'en-US' }) // Finnish language: 'fi-FI' - it works! 
+      SpeechRecognition.startListening({ continuous: true, language: locale })
     } else {
       SpeechRecognition.stopListening();
       setListeningCancelled(true);
@@ -211,12 +224,16 @@ export default function Home() {
   return (
     <div className="items-center justify-items-center min-h-screen p-8 py-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-6 row-start-2 items-center">
-        <h1 className="text-2xl sm:text-4xl font-normal tracking-[-.01em] text-center text-Nordea-text-dark-blue">
-          Hi Elina! <br /> How can I help you today?
-        </h1>
-        {messages.length == 0 ? <p className="text-md text-center font-normal text-Nordea-dark-grey">
-          I am Nia, your personal <br/> <span className='font-bold'>financial</span> and <span className='font-bold'>banking</span> AI-assistant <br/> here at Nordea.
-        </p> : null}
+        <div className="text-2xl sm:text-4xl font-normal tracking-[-.01em] text-center text-Nordea-text-dark-blue">
+          <h1>{t.greeting.split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}</h1> 
+        </div>
+        {messages.length === 0 && (
+          <p className="text-md text-center font-normal text-Nordea-dark-grey">
+            {t.intro.split('\n').map((line, i) =>
+              <span key={i}>{line}<br/></span>
+            )}
+          </p>
+        )}
         <div className="flex flex-col gap-2 w-full items-center">
           {/* Message log */}
           <div
@@ -293,7 +310,7 @@ export default function Home() {
             <input
               type="text"
               ref={inputRef} // Focus on text input when response is received
-              placeholder="Ask a question..."
+              placeholder={t.inputPlaceholder}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyDown}

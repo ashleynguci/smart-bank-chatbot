@@ -74,7 +74,8 @@ llm = ChatGoogleGenerativeAI(
 prompt = """You are a Chatbot integrated into the Finnish Nordea internet bank. 
 You have access to the user's banking details (loans, cards, invoices) and transaction history. 
 Consider what kind of services Nordea provides. 
-The user interacts with you via voice chat on a mobile app, like Siri. 
+The user interacts with you via voice chat on a mobile app, like Siri.
+The user may speak in Finnish or English, and you should respond in the same language.
 You are a primary point of interaction interface that can access bank services and related information,
 such as sales, loans and insurance information. Provide factual information based on the Finnish banking system 
 and respond with short messages, not longer than a couple sentences. 
@@ -189,6 +190,7 @@ class ChatInput(BaseModel):
     message: str
     userId: str
     audio: bool
+    langCode: str
 
 # PDF/JSON preprocessing — optional for now
 def process_pdf(file_path: str) -> str:
@@ -248,6 +250,7 @@ def chat_endpoint(chat_input: ChatInput):
     user_message = chat_input.message
     user_id = chat_input.userId
     audio = chat_input.audio
+    lang = chat_input.langCode # Not used yet, but may be applied to set text-to-speech parameters
 
     # These are hardcoded structured response examples.
     # Link and attachment messages are not added to memory, AI won't be aware of them yet.
