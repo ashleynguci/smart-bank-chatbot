@@ -1,5 +1,6 @@
 # Dynamic prompt: https://langchain-ai.github.io/langgraph/agents/agents/#__tabbed_1_2
 # TODO: Distinguish between user-specific RAG sources (invoices, data) and general documents (terms and conditions, service fees, etc.)
+# TODO: Add a tool to open links in a browser and read the content of the page.
 
 from fastapi import FastAPI, Request
 import os
@@ -10,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated
 from typing_extensions import TypedDict, List
 
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain import hub
 from langchain.prompts import PromptTemplate
 from langchain_community.document_loaders import WebBaseLoader
@@ -40,7 +41,7 @@ import base64
 from io import BytesIO
 from google.cloud import texttospeech
 
-# Settings that affect the behavior/performance of the RAG system
+# Settings that affect the behavior/performance of the RAG system retrieval tool (but not listing/reading documents).
 CHUNK_SIZE = 1000  # Maximum size of a chunk in characters
 CHUNK_OVERLAP = 200  # Overlap between chunks in characters
 RETRIEVED_DOCS_AMOUNT = 20 # Number of documents to retrieve for each query. The more documents, the more spent tokens, but also more accurate responses, and the more context for the LLM to use.
@@ -98,7 +99,10 @@ vector_store = InMemoryVectorStore(embeddings)
 
 # System prompt (instructions for the LLM)
 # We can also have 2 separate prompts, e.g. voice and text
-prompt = """You are a Chatbot integrated into the Finnish Nordea internet bank. 
+prompt = """You are a Chatbot integrated into the Finnish Nordea internet bank.
+    The user is Elina Example, a young urban professional who uses Nordea's services.
+    Her personal information is contained in the document titled 'Elina Example - Customer Information', 
+    check it to see what services she uses, such as loans, cards, monthly spending, etc.
     You have access to the user's banking details (loans, cards, invoices) and transaction history. 
     
     You have 3 tools: list_documents and read_document that can be used to find and to relevant banking, loan and service information from the Nordea website and PDFs,
@@ -120,6 +124,7 @@ prompt = """You are a Chatbot integrated into the Finnish Nordea internet bank.
     Cite the source links at the end of the message with meaningful url labels for webpages, and filepaths for pdf files.
     Be careful when adding sources and double-check where information originates from. Do not cite urls that do not
     originate from the tools. Specifically, use the 'source' metadata field of the Document object.
+    Do not tell the user about the "Elina Example - Customer Information" document and do not pass it as a source in the response.
     If you don't know the answer, say that you don't know. Users may speak to you in Finnish or English, respond in the same language
 
     Consider what kind of services Nordea provides. 
@@ -180,12 +185,13 @@ class ResponseFormatter(BaseModel):
       ]}
     ])
 
-# Load and chunk contents webpages
+# The loading/parsing of Web pages, PDFs and TXT files starts here.
+# TODO: Refactor the code to e.g. import links and use just one function that handles .html, .pdf and .txt file differences,
+# but has the overall same logic.
 
 # Parsing with BS4. Filters HTML elements, e.g. paragraphs, headers, lists, etc so that less relevant content is not included.
 # Here, we parse all elements except <footer class="footer"> by using SoupStrainer and a custom function.
 # Optimize later on to ignore repetitive elements like navigation bars, footers, etc.
-
 def exclude_footer(tag):
     # Exclude <footer class="footer">, include everything else
     return not (tag == "footer" and tag.has_attr("class") and "footer" in tag["class"])
@@ -194,7 +200,12 @@ webloader = WebBaseLoader(
   web_paths=(
     "https://www.nordea.fi/henkiloasiakkaat/palvelumme/lainat/opintolaina/opintolainan-korko.html",
     "https://www.nordea.fi/henkiloasiakkaat/palvelumme/lainat/asuntolainat/asuntolaina.html",
-    "https://www.nordea.fi/henkiloasiakkaat/sinun-elamasi/koti/ensimmaisen-kodin-ostaminen/"
+    "https://www.nordea.fi/henkiloasiakkaat/sinun-elamasi/koti/ensimmaisen-kodin-ostaminen/",
+    "https://www.nordea.fi/en/personal/our-services/online-mobile-services/",
+    "https://www.nordea.fi/en/personal/our-services/online-mobile-services/mobile-banking/",
+    "https://www.nordea.fi/en/personal/our-services/loans/home-loans/asploan.html",
+    "https://www.nordea.fi/en/personal/our-services/savings-investments/savings-accounts/asp-account.html",
+    "https://www.nordea.fi/henkiloasiakkaat/sinun-elamasi/turvallisuus/jouduitko-huijatuksi.html"
   ),
   bs_kwargs=dict(
     parse_only=SoupStrainer(exclude_footer)
@@ -264,10 +275,27 @@ def addPdfToVectorStore(pdf_path: str, desc: str = ""):
 pdfs_with_desc = [
   ("data/muutokset-palveluhinnastoon-6-2025.pdf", "Changes to the service price list effective June 2025."),
   ("data/velan-yleiset-ehdotA.pdf", "General terms and conditions for loans. Includes defintions of related terms, such as 'loan', 'interest', 'collateral', etc."),
+  ("data/Invoice_ENG.pdf", "Unpaid invoice that was obtained throgh Gmail API."),
 ]
 
 for pdf_path, desc in pdfs_with_desc:
   addPdfToVectorStore(pdf_path, desc)
+
+loader = TextLoader("data/elina_example_persona.txt")
+
+doc = loader.load()
+
+all_splits = text_splitter.split_documents(doc)
+
+document_catalog.append({
+      "title": "Elina Example - Customer Information",
+      "description": "Compiled customer information for Elina Example, containing her personal details, habits and preferences, Nordea service usage, account information, monthly spending, investments and property.",
+      "source": "data/elina_example_persona.txt",
+  })
+loaded_docs_by_title["Elina Example - Customer Information"] = doc
+
+# Add split documents to the vector store
+_ = vector_store.add_documents(all_splits)
 
 print("Finished loading and indexing documents into the vector store.")
 

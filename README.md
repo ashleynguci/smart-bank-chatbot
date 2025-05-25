@@ -61,6 +61,8 @@ or
     docker compose -f 'docker-compose.yml' up -d --build
     ```
     The first time you run this command, it may take a few minutes to set everything up and running. Subsequent `docker compose` runs will be much quicker!
+Note that it might take around 30 seconds until backend starts up, as it needs to parse documents first before accepting requests.
+The Backend container will not be usable until a 'Application startup complete' message has been shown in the terminal console.
 
 Now, the containers are all set up and ready to communicate with one another!
 The Frontend UI is now accessible at: `http://localhost:3000/`.
