@@ -1,0 +1,722 @@
+[
+  {
+    "amount": 54.17,
+    "receiver": "Lidl",
+    "date": "2024-05-19",
+    "type": "Groceries"
+  },
+  {
+    "amount": 27.46,
+    "receiver": "VR Matkalla",
+    "date": "2024-05-20",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 7.02,
+    "receiver": "Spotify",
+    "date": "2024-05-21",
+    "type": "Subscription"
+  },
+  {
+    "amount": 22.02,
+    "receiver": "Alepa",
+    "date": "2024-05-21",
+    "type": "Groceries"
+  },
+  {
+    "amount": 4.22,
+    "receiver": "HSL",
+    "date": "2024-05-22",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 12.32,
+    "receiver": "Netflix",
+    "date": "2024-05-23",
+    "type": "Subscription"
+  },
+  {
+    "amount": 32.85,
+    "receiver": "VR Matkalla",
+    "date": "2024-05-25",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 307.64,
+    "receiver": "Nordnet Investment",
+    "date": "2024-06-05",
+    "type": "Investment"
+  },
+  {
+    "amount": 47.25,
+    "receiver": "Wolt",
+    "date": "2024-06-07",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 6.06,
+    "receiver": "HSL",
+    "date": "2024-06-07",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 69.91,
+    "receiver": "Alepa",
+    "date": "2024-06-10",
+    "type": "Groceries"
+  },
+  {
+    "amount": 111.84,
+    "receiver": "Gigantti",
+    "date": "2024-06-12",
+    "type": "Shopping"
+  },
+  {
+    "amount": 258.61,
+    "receiver": "Amazon.de",
+    "date": "2024-06-20",
+    "type": "Shopping"
+  },
+  {
+    "amount": 194.63,
+    "receiver": "Finnair",
+    "date": "2024-06-21",
+    "type": "Travel"
+  },
+  {
+    "amount": 313.14,
+    "receiver": "Nordea Savings",
+    "date": "2024-06-22",
+    "type": "Savings"
+  },
+  {
+    "amount": 13.54,
+    "receiver": "Netflix",
+    "date": "2024-06-26",
+    "type": "Subscription"
+  },
+  {
+    "amount": 58.42,
+    "receiver": "Cafe Regatta",
+    "date": "2024-06-30",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 12.88,
+    "receiver": "Cafe Regatta",
+    "date": "2024-07-02",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 37.94,
+    "receiver": "Wolt",
+    "date": "2024-07-02",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 209.07,
+    "receiver": "Amazon.de",
+    "date": "2024-07-08",
+    "type": "Shopping"
+  },
+  {
+    "amount": 46.69,
+    "receiver": "Alepa",
+    "date": "2024-07-10",
+    "type": "Groceries"
+  },
+  {
+    "amount": 10.73,
+    "receiver": "Wolt",
+    "date": "2024-07-12",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 32.56,
+    "receiver": "VR Matkalla",
+    "date": "2024-07-13",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 48.15,
+    "receiver": "Amazon.de",
+    "date": "2024-07-16",
+    "type": "Shopping"
+  },
+  {
+    "amount": 23.14,
+    "receiver": "Wolt",
+    "date": "2024-07-18",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 34.65,
+    "receiver": "HSL",
+    "date": "2024-07-21",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 188.62,
+    "receiver": "Finnair",
+    "date": "2024-07-29",
+    "type": "Travel"
+  },
+  {
+    "amount": 41.59,
+    "receiver": "Cafe Regatta",
+    "date": "2024-07-31",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 481.02,
+    "receiver": "Nordnet Investment",
+    "date": "2024-08-02",
+    "type": "Investment"
+  },
+  {
+    "amount": 306.45,
+    "receiver": "Nordnet Investment",
+    "date": "2024-08-02",
+    "type": "Investment"
+  },
+  {
+    "amount": 237.86,
+    "receiver": "Finnair",
+    "date": "2024-08-07",
+    "type": "Travel"
+  },
+  {
+    "amount": 34.56,
+    "receiver": "Wolt",
+    "date": "2024-08-08",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 36.39,
+    "receiver": "Helsinki Gym",
+    "date": "2024-08-09",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 32.55,
+    "receiver": "VR Matkalla",
+    "date": "2024-08-11",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 49.53,
+    "receiver": "Wolt",
+    "date": "2024-08-12",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 381.91,
+    "receiver": "Nordnet Investment",
+    "date": "2024-08-12",
+    "type": "Investment"
+  },
+  {
+    "amount": 37.56,
+    "receiver": "Amazon.de",
+    "date": "2024-08-16",
+    "type": "Shopping"
+  },
+  {
+    "amount": 49.02,
+    "receiver": "Helsinki Gym",
+    "date": "2024-08-19",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 374.3,
+    "receiver": "Nordea Savings",
+    "date": "2024-08-25",
+    "type": "Savings"
+  },
+  {
+    "amount": 37.34,
+    "receiver": "Yoga Helsinki",
+    "date": "2024-08-25",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 433.8,
+    "receiver": "Nordnet Investment",
+    "date": "2024-08-25",
+    "type": "Investment"
+  },
+  {
+    "amount": 29.89,
+    "receiver": "S-Market",
+    "date": "2024-08-25",
+    "type": "Groceries"
+  },
+  {
+    "amount": 9.83,
+    "receiver": "HSL",
+    "date": "2024-08-25",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 256.56,
+    "receiver": "Finnair",
+    "date": "2024-09-06",
+    "type": "Travel"
+  },
+  {
+    "amount": 26.26,
+    "receiver": "HSL",
+    "date": "2024-09-10",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 399.01,
+    "receiver": "Nordea Savings",
+    "date": "2024-09-15",
+    "type": "Savings"
+  },
+  {
+    "amount": 88.96,
+    "receiver": "K-Market",
+    "date": "2024-09-16",
+    "type": "Groceries"
+  },
+  {
+    "amount": 71.12,
+    "receiver": "Alepa",
+    "date": "2024-09-20",
+    "type": "Groceries"
+  },
+  {
+    "amount": 33.72,
+    "receiver": "VR Matkalla",
+    "date": "2024-09-20",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 467.01,
+    "receiver": "Nordea Savings",
+    "date": "2024-09-20",
+    "type": "Savings"
+  },
+  {
+    "amount": 9.36,
+    "receiver": "Spotify",
+    "date": "2024-09-20",
+    "type": "Subscription"
+  },
+  {
+    "amount": 241.42,
+    "receiver": "Gigantti",
+    "date": "2024-09-21",
+    "type": "Shopping"
+  },
+  {
+    "amount": 167.59,
+    "receiver": "Gigantti",
+    "date": "2024-10-03",
+    "type": "Shopping"
+  },
+  {
+    "amount": 75.65,
+    "receiver": "Lidl",
+    "date": "2024-10-17",
+    "type": "Groceries"
+  },
+  {
+    "amount": 98.43,
+    "receiver": "Gigantti",
+    "date": "2024-10-22",
+    "type": "Shopping"
+  },
+  {
+    "amount": 8.61,
+    "receiver": "Netflix",
+    "date": "2024-10-23",
+    "type": "Subscription"
+  },
+  {
+    "amount": 8.07,
+    "receiver": "Netflix",
+    "date": "2024-10-30",
+    "type": "Subscription"
+  },
+  {
+    "amount": 33.15,
+    "receiver": "VR Matkalla",
+    "date": "2024-10-31",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 4.08,
+    "receiver": "HSL",
+    "date": "2024-11-02",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 29.63,
+    "receiver": "K-Market",
+    "date": "2024-11-02",
+    "type": "Groceries"
+  },
+  {
+    "amount": 9.45,
+    "receiver": "Spotify",
+    "date": "2024-11-03",
+    "type": "Subscription"
+  },
+  {
+    "amount": 187.14,
+    "receiver": "Amazon.de",
+    "date": "2024-11-04",
+    "type": "Shopping"
+  },
+  {
+    "amount": 24.61,
+    "receiver": "Cafe Regatta",
+    "date": "2024-11-07",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 28.77,
+    "receiver": "Lidl",
+    "date": "2024-11-11",
+    "type": "Groceries"
+  },
+  {
+    "amount": 94.57,
+    "receiver": "Amazon.de",
+    "date": "2024-11-17",
+    "type": "Shopping"
+  },
+  {
+    "amount": 48.41,
+    "receiver": "Yoga Helsinki",
+    "date": "2024-11-26",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 37.72,
+    "receiver": "Yoga Helsinki",
+    "date": "2024-12-02",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 72.83,
+    "receiver": "K-Market",
+    "date": "2024-12-05",
+    "type": "Groceries"
+  },
+  {
+    "amount": 206.73,
+    "receiver": "Gigantti",
+    "date": "2024-12-05",
+    "type": "Shopping"
+  },
+  {
+    "amount": 10.57,
+    "receiver": "Wolt",
+    "date": "2024-12-06",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 27.83,
+    "receiver": "Helsinki Gym",
+    "date": "2024-12-15",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 47.01,
+    "receiver": "K-Market",
+    "date": "2024-12-24",
+    "type": "Groceries"
+  },
+  {
+    "amount": 54.58,
+    "receiver": "Cafe Regatta",
+    "date": "2024-12-25",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 436.03,
+    "receiver": "Nordea Savings",
+    "date": "2024-12-25",
+    "type": "Savings"
+  },
+  {
+    "amount": 260.46,
+    "receiver": "Finnair",
+    "date": "2024-12-26",
+    "type": "Travel"
+  },
+  {
+    "amount": 69.3,
+    "receiver": "Lidl",
+    "date": "2024-12-27",
+    "type": "Groceries"
+  },
+  {
+    "amount": 121.52,
+    "receiver": "Finnair",
+    "date": "2025-01-02",
+    "type": "Travel"
+  },
+  {
+    "amount": 402.9,
+    "receiver": "Nordnet Investment",
+    "date": "2025-01-09",
+    "type": "Investment"
+  },
+  {
+    "amount": 434.43,
+    "receiver": "Nordnet Investment",
+    "date": "2025-01-15",
+    "type": "Investment"
+  },
+  {
+    "amount": 74.27,
+    "receiver": "S-Market",
+    "date": "2025-01-16",
+    "type": "Groceries"
+  },
+  {
+    "amount": 21.31,
+    "receiver": "Cafe Regatta",
+    "date": "2025-01-18",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 115.66,
+    "receiver": "Finnair",
+    "date": "2025-01-18",
+    "type": "Travel"
+  },
+  {
+    "amount": 60.83,
+    "receiver": "K-Market",
+    "date": "2025-01-19",
+    "type": "Groceries"
+  },
+  {
+    "amount": 27.42,
+    "receiver": "Lidl",
+    "date": "2025-01-20",
+    "type": "Groceries"
+  },
+  {
+    "amount": 26.76,
+    "receiver": "Wolt",
+    "date": "2025-01-21",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 52.32,
+    "receiver": "Lidl",
+    "date": "2025-01-24",
+    "type": "Groceries"
+  },
+  {
+    "amount": 23.31,
+    "receiver": "HSL",
+    "date": "2025-01-29",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 21.68,
+    "receiver": "Alepa",
+    "date": "2025-02-02",
+    "type": "Groceries"
+  },
+  {
+    "amount": 61.06,
+    "receiver": "K-Market",
+    "date": "2025-02-12",
+    "type": "Groceries"
+  },
+  {
+    "amount": 400.01,
+    "receiver": "Nordnet Investment",
+    "date": "2025-02-21",
+    "type": "Investment"
+  },
+  {
+    "amount": 25.83,
+    "receiver": "K-Market",
+    "date": "2025-02-25",
+    "type": "Groceries"
+  },
+  {
+    "amount": 197.24,
+    "receiver": "Finnair",
+    "date": "2025-02-27",
+    "type": "Travel"
+  },
+  {
+    "amount": 62.1,
+    "receiver": "Finnair",
+    "date": "2025-03-02",
+    "type": "Travel"
+  },
+  {
+    "amount": 29.82,
+    "receiver": "Wolt",
+    "date": "2025-03-04",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 7.79,
+    "receiver": "Netflix",
+    "date": "2025-03-16",
+    "type": "Subscription"
+  },
+  {
+    "amount": 51.76,
+    "receiver": "Finnair",
+    "date": "2025-03-21",
+    "type": "Travel"
+  },
+  {
+    "amount": 20.4,
+    "receiver": "Wolt",
+    "date": "2025-03-22",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 43.85,
+    "receiver": "S-Market",
+    "date": "2025-03-23",
+    "type": "Groceries"
+  },
+  {
+    "amount": 34.19,
+    "receiver": "Alepa",
+    "date": "2025-03-31",
+    "type": "Groceries"
+  },
+  {
+    "amount": 142.62,
+    "receiver": "Finnair",
+    "date": "2025-04-01",
+    "type": "Travel"
+  },
+  {
+    "amount": 46.73,
+    "receiver": "Wolt",
+    "date": "2025-04-05",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 52.9,
+    "receiver": "K-Market",
+    "date": "2025-04-08",
+    "type": "Groceries"
+  },
+  {
+    "amount": 8.72,
+    "receiver": "Netflix",
+    "date": "2025-04-12",
+    "type": "Subscription"
+  },
+  {
+    "amount": 6.18,
+    "receiver": "VR Matkalla",
+    "date": "2025-04-13",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 16.53,
+    "receiver": "VR Matkalla",
+    "date": "2025-04-17",
+    "type": "Public Transport"
+  },
+  {
+    "amount": 32.09,
+    "receiver": "Helsinki Gym",
+    "date": "2025-04-17",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 52.07,
+    "receiver": "Alepa",
+    "date": "2025-04-19",
+    "type": "Groceries"
+  },
+  {
+    "amount": 35.38,
+    "receiver": "Yoga Helsinki",
+    "date": "2025-04-23",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 273.78,
+    "receiver": "Finnair",
+    "date": "2025-04-29",
+    "type": "Travel"
+  },
+  {
+    "amount": 57.87,
+    "receiver": "S-Market",
+    "date": "2025-05-01",
+    "type": "Groceries"
+  },
+  {
+    "amount": 50.14,
+    "receiver": "Alepa",
+    "date": "2025-05-01",
+    "type": "Groceries"
+  },
+  {
+    "amount": 52.88,
+    "receiver": "Yoga Helsinki",
+    "date": "2025-05-05",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 54.98,
+    "receiver": "Cafe Regatta",
+    "date": "2025-05-06",
+    "type": "Restaurant"
+  },
+  {
+    "amount": 27.67,
+    "receiver": "Lidl",
+    "date": "2025-05-08",
+    "type": "Groceries"
+  },
+  {
+    "amount": 13.88,
+    "receiver": "Netflix",
+    "date": "2025-05-10",
+    "type": "Subscription"
+  },
+  {
+    "amount": 46.12,
+    "receiver": "Helsinki Gym",
+    "date": "2025-05-11",
+    "type": "Health & Fitness"
+  },
+  {
+    "amount": 31.98,
+    "receiver": "Amazon.de",
+    "date": "2025-05-11",
+    "type": "Shopping"
+  },
+  {
+    "amount": 37.0,
+    "receiver": "Lidl",
+    "date": "2025-05-12",
+    "type": "Groceries"
+  },
+  {
+    "amount": 141.9,
+    "receiver": "Amazon.de",
+    "date": "2025-05-12",
+    "type": "Shopping"
+  },
+  {
+    "amount": 33.01,
+    "receiver": "HSL",
+    "date": "2025-05-15",
+    "type": "Public Transport"
+  }
+]
