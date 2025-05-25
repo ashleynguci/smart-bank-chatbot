@@ -101,17 +101,23 @@ vector_store = InMemoryVectorStore(embeddings)
 prompt = """You are a Chatbot integrated into the Finnish Nordea internet bank. 
     You have access to the user's banking details (loans, cards, invoices) and transaction history. 
     
-    You have a retrieve tool that can be used to find and to relevant banking, loan and service information from the Nordea website.
-    It also has PDF files that contain more specialized information, such as terms and conditions, service fees and their changes,
-    as well as terminology explanations.
-    Use the retrieve tool to answer user questions. You may not need to use it for greetings or general questions, but
-    If you don't know the answer without the retrieval tool, you must always use it.
-    The retrieve tool uses similarity search, so it benefits from using longer queries that contain more context and keywords.
-    Do not respond with "I don't know" or "I don't have that information" if you haven't used the retrieve tool to find the answer. 
+    You have 3 tools: list_documents and read_document that can be used to find and to relevant banking, loan and service information from the Nordea website and PDFs,
+    and retrieve that can be used to find relevant information based on a query with keywords.
+    list_documents: lists all available documents with their metadata (title and description).
+    read_document: reads the full content of a selected document by Name.
+    retrieve: retrieves information related to a keyword query across all documents and webpages.
     
-    Cite the source links at the end of the message with meaningful url labels.
+    Use the tools to answer user questions. You must always start with list_documents first and evaluate which documents are relevant.
+    Then, read specific documents by Name with read_document to find the answer.
+    You may only use retrieve if you cannot find the answer with list_documents and read_document tools.
+
+    You may not need to use tools for greetings or general questions, but
+    If you don't know the answer without the tools, you must always use them.
+    Do not respond with "I don't know" or "I don't have that information".
+    
+    Cite the source links at the end of the message with meaningful url labels for webpages, and filepaths for pdf files.
     Be careful when adding sources and double-check where information originates from. Do not cite urls that do not
-    originate from the retrieve tool.
+    originate from the tools. Specifically, use the 'source' metadata field of the Document object.
     If you don't know the answer, say that you don't know. Users may speak to you in Finnish or English, respond in the same language
 
     Consider what kind of services Nordea provides. 
@@ -119,7 +125,8 @@ prompt = """You are a Chatbot integrated into the Finnish Nordea internet bank.
     The user may speak in Finnish or English, and you should respond in the same language.
     You are a primary point of interaction interface that can access bank services and related information,
     such as sales, loans and insurance information. Provide factual information based on the Finnish banking system 
-    and respond with short messages, not longer than a couple sentences. 
+    and respond with short messages, no longer than a couple sentences. 
+
     The user is a young urban professional aiming to make banking services more convenient. 
     Because of recognizing speech, there may be slight speech-to-text inconsistencies and errors.
     Consider that sometimes user may mean similar-sounding words that fit context better, such as 'pay' instead of 'play'.
@@ -194,6 +201,18 @@ docs = webloader.load()
 # docs.append or docs.extend to add more documents, also from other sources like PDFs or text files.
 # Alternatively, call add_documents() on the vector store directly.
 
+document_catalog = [] # List to hold document names, descriptions and metadata
+loaded_docs_by_title = {} # Dict to hold loaded documents by their title
+
+for doc in docs:
+    print("\n\n",doc.metadata.get("title"))
+    document_catalog.append({
+        "title": doc.metadata.get("title"),
+        "description": doc.metadata.get("description", "No description available."),
+        "source": doc.metadata.get("source", "No source available."),
+    })
+    loaded_docs_by_title[doc.metadata["title"]] = doc
+
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
 all_splits = text_splitter.split_documents(docs)
 
@@ -214,30 +233,38 @@ for i, document in enumerate(all_splits):
 vector_store = InMemoryVectorStore(embeddings)
 _ = vector_store.add_documents(all_splits)
 
-def addPdfToVectorStore(pdf_path: str):
-    """Load a PDF file and add its contents to the vector store."""
-    if not os.path.exists(pdf_path):
-        raise FileNotFoundError(f"The file {pdf_path} does not exist.")
-    
-    # Initialize the loader
-    loader = PyPDFLoader(file_path=pdf_path)
-    
-    # Load the documents
-    docs = loader.load()
-    
-    # Split the documents
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
-    all_splits = text_splitter.split_documents(docs)
-    #print(f"Total documents to be added to vector store: {len(all_splits)}")
-    
-    # Add documents to the vector store
-    _ = vector_store.add_documents(all_splits)
+def addPdfToVectorStore(pdf_path: str, desc: str = ""):
+  """Load a PDF file and add its contents to the vector store, with an optional description."""
+  if not os.path.exists(pdf_path):
+    raise FileNotFoundError(f"The file {pdf_path} does not exist.")
+  
+  # Initialize the loader
+  loader = PyPDFLoader(file_path=pdf_path)
 
-for pdf_path in [
-    "data/muutokset-palveluhinnastoon-6-2025.pdf",
-    "data/velan-yleiset-ehdotA.pdf",
-]:
-    addPdfToVectorStore(pdf_path)
+  # Load the documents
+  doc = loader.load()
+  
+  # Split the documents
+  text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+  all_splits = text_splitter.split_documents(docs)
+
+  document_catalog.append({
+        "title": doc[0].metadata.get("title"),
+        "description": desc,
+        "source": doc[0].metadata.get("source", "No source available."),
+    })
+  loaded_docs_by_title[doc[0].metadata["title"]] = doc
+
+  # Add split documents to the vector store
+  _ = vector_store.add_documents(all_splits)
+
+pdfs_with_desc = [
+  ("data/muutokset-palveluhinnastoon-6-2025.pdf", "Changes to the service price list effective June 2025."),
+  ("data/velan-yleiset-ehdotA.pdf", "General terms and conditions for loans. Includes defintions of related terms, such as 'loan', 'interest', 'collateral', etc."),
+]
+
+for pdf_path, desc in pdfs_with_desc:
+  addPdfToVectorStore(pdf_path, desc)
 
 print("Finished loading and indexing documents into the vector store.")
 
@@ -252,9 +279,27 @@ def retrieve(query: str):
     )
     return serialized, retrieved_docs
 
+@tool
+def list_documents() -> str:
+    """List all available documents with their metadata (title and description)."""
+    response = "\n\n".join(
+        f"Title: {doc['title']}\nDescription: {doc['description']}"
+        for doc in document_catalog
+    )
+    return response
+
+@tool
+def read_document(doc_name: str) -> str:
+    """Read the full content of a selected document by Name."""
+    doc = loaded_docs_by_title.get(doc_name)
+    if not doc:
+        return f"Document with Name '{doc_name}' not found."
+    
+    return doc
+
 agent_executor = create_react_agent(
     llm, 
-    [retrieve], 
+    [list_documents, read_document, retrieve], 
     checkpointer=memory, 
     prompt=prompt,
     response_format=ResponseFormatter,
