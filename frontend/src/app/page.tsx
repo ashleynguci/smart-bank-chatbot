@@ -257,17 +257,23 @@ export default function Home() {
                     switch (item.type) {
                       case 'text':
                         return <span key={i}>{item.content}</span>;
-                      case 'link':
-                        return (
+                        case 'link':
+                        // Check if the link is a PDF
+                        const isPdf = item.url.toLowerCase().endsWith('.pdf');
+                        return isPdf ? (
+                          <div key={i} className='my-4'>
+                            <a className="border px-4 p-2 rounded-3xl bg-white shadow-sm" href={item.url} target="_blank" rel="noopener noreferrer">{`📎 ${item.label}`}</a>
+                          </div>
+                        ) : (
                           <span key={i} className="gap-1 bg-white rounded-xl px-2 mx-1">
-                            <a
-                              href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-Nordea-accent-2 underline text-sm"
-                            >
-                              {item.label}
-                            </a>
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-Nordea-accent-2 underline text-sm"
+                          >
+                            {item.label}
+                          </a>
                           </span>
                         );
                       case 'attachment':
@@ -276,7 +282,7 @@ export default function Home() {
                             <a className="border px-4 p-2 rounded-3xl bg-white shadow-sm" href={item.url} target="_blank" rel="noopener noreferrer">{`📎 ${item.label}`}</a>
                           </div>
                         );
-                      case 'audio':
+                      /* case 'audio':
                         // Render audio player for audio responses
                         const audioUrl =
                           audioUrlCache.current[item.content] ||
@@ -291,7 +297,7 @@ export default function Home() {
                           >
                             Your browser does not support the audio element.
                           </audio>
-                        );
+                        ); */
                       default:
                         return null;
                     }

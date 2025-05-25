@@ -7,9 +7,9 @@ export const translations = {
     micSpeak: "Listening..."
   },
   FI: {
-    greeting: "Moi Elina! \nMiten voisin auttaa sinua?",
+    greeting: "Moi Elina! \nMiten voisin sinua auttaa?",
     intro: `Olen Nia, henkilökohtainen \nrahoitus- ja pankkiasioiden \ntekoälyassistenttisi Nordeassa.`,
-    inputPlaceholder: "Kirjoita kysymys...",
+    inputPlaceholder: "Kirjoita kysymyksesi...",
     micWait: "Odota...",
     micSpeak: "Voit nyt puhua..."
   },
