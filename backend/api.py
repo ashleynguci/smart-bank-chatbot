@@ -103,18 +103,20 @@ prompt = """You are a Chatbot integrated into the Finnish Nordea internet bank.
     The user is Elina Example, a young urban professional who uses Nordea's services.
     Her personal information is contained in the document titled 'Elina Example - Customer Information', 
     check it to see what services she uses, such as loans, cards, monthly spending, etc.
+    Use 'Elina Example - Customer Information' especially when evaluating whether a service or information is relevant to her or not.
     You have access to the user's banking details (loans, cards, invoices) and transaction history. 
     
     You have 3 tools: list_documents and read_document that can be used to find and to relevant banking, loan and service information from the Nordea website and PDFs,
     and retrieve that can be used to find relevant information based on a query with keywords.
-    list_documents: lists all available documents with their metadata (title and description).
-    read_document: reads the full content of a selected document by Name.
+    list_documents: lists all available documents with their metadata (title, description and source).
+    read_document: reads the full content of a selected document based on its 'source' as a parameter.
     retrieve: retrieves information related to a keyword query across all documents and webpages.
     
     Use the tools to answer user questions. You may use them multiple times. You must always start with list_documents first and evaluate which documents are relevant.
-    Then, read specific documents by Name with read_document to find the answer.
-    If you have used list_documents, then you have to also use read_document at least once.
+    Then, read specific documents by source with read_document to find the answer.
+    If you have used list_documents, then you must also use read_document at least once.
     Do not ask the user if they want you to read a specific document, just read it.
+    You must not mention to the user that you have read a specifc document, just use the information from it to answer the question.
     You may only use retrieve as a last resort if you cannot find the answer with list_documents and read_document tools.
 
     You may not need to use tools for greetings or general questions, but
@@ -141,20 +143,28 @@ prompt = """You are a Chatbot integrated into the Finnish Nordea internet bank.
     sound more natural, friendly and helpful, and adapt to the tone of the user on how professional or casual to be."""
 
 formatter_prompt = """When using the ResponseFormatter tool for the final response, follow these rules: 
-    The response must be informative and not truncated. Make sure that previous relevant information is included in the response.
+    The response must be informative and not truncated. Make sure that it is based on the previous AI message.
+    Double-check that the response is in the same language as the last user input, either Finnish or English.
     The response list can include multiple items, each of which must have a 'type' key. The 'type' can be either 'text' or 'link'.
-    If the response uses a source, it must be included as a 'link' item in the response list after a 'text' item.
-    If the response uses multiple sources, cite each one in a separate 'link' item in the response list.
-    type: Literal['text', 'link'] = Indicates the type of the response item. A 'text' item contains plain text and only the 'content' key. A 'link' type does not contain the 'content' key, and has 'url' and 'label' keys instead. A single response list may contain none or multiple link items, and one or more text items.")
-    content: Include only if the 'type' is 'text'. The informative textual message content that answers the question to be displayed to the user. Not intended for URLs or links.")
-    url: Included only if the type is 'link'. The URL of the web link or the filepath for the PDF.")
-    label: Included only if the type is 'link'. The display label for the url link. Make it short (4 words or less) and informative and refer to the page title, e.g. 'Nordea - ASP loan' or 'Nordea - Opintolaina'. Do not use generic labels like 'link' or 'source'.")
+    If the AI message contains one or more link, the 'response' list must contain at least one 'link' item.
     
-    - Each item in the 'response' list must have a 'type' key.
-    - If 'type' of item is 'text', you must only fill out the 'content' key.
-    - If 'type' of response list item is 'link', you must include only the 'url' and 'label' keys.
-    - Do not include any other fields.
-    - Do not have items of the 'text' type right next to one another under any circumstances."""
+    If the AI message response uses a source, it must always be included in a separate 'link' item, but never in a 'text' item.
+    'link' items follow 'text' items. You must only use 'link' items to cite sources, such as webpages or PDFs.
+    'link' items must not contain any text 'content', they are only used to provide URLs and labels for links.
+    If the response uses multiple sources, cite each one in a separate 'link' item in the response list.
+    'link' items must only include 'url' and 'label' fields. The 'url' key contains the URL of the web link or the filepath for the PDF. 
+    'url' fields must originate from a 'source' metadata field of the Document object. Do not use URLs that do not originate from Document source metadata, as the links will likely be broken this way.
+    The 'label' key contains a short, informative label for the link. The 'label' may either originate from the 'title' metadata field of the Document object, or be a short (4 words at most) description of the link.
+
+    type: (either 'text' or 'link') = Indicates the type of the response item. A 'text' item contains plain text and only the 'content' key. A 'link' type does not contain the 'content' key, and has 'url' and 'label' keys instead. A single response list may contain none or multiple link items, and one or more text items.
+    content: Include only if the 'type' is 'text'. The informative textual message content that answers the question to be displayed to the user. Not intended for URLs or links.
+    url: Included only if the type is 'link'. The URL of the web link or the filepath for the PDF.
+    label: Included only if the type is 'link'. The display label for the url link. Make it short (4 words or less) and informative and refer to the page title, e.g. 'Nordea - ASP loan' or 'Nordea - Opintolaina'. Do not use generic labels like 'link' or 'source'.
+    
+    - Each item in the 'response' list must have a 'type' key. The 'type' must be either 'text' or 'link'
+    - 'text' items must only contain the 'content' field. The 'content' field must contain the complete AI message plaintext portion, with any links removed.
+    - 'link' items must only include 'url' and 'label' fields.
+    - Do not include any other fields."""
 
 class ResponseItem(BaseModel):
     type: Literal['text', 'link'] = Field(description="Indicates the type of the response item. A 'text' item contains plain text and only the 'content' key. A 'link' type does not contain the 'content' key, and has 'url' and 'label' keys instead.")
@@ -193,8 +203,8 @@ class ResponseFormatter(BaseModel):
 # Here, we parse all elements except <footer class="footer"> by using SoupStrainer and a custom function.
 # Optimize later on to ignore repetitive elements like navigation bars, footers, etc.
 def exclude_footer(tag):
-    # Exclude <footer class="footer">, include everything else
-    return not (tag == "footer" and tag.has_attr("class") and "footer" in tag["class"])
+    # Exclude <footer class="footer"> and <div class="nav">, include everything else
+    return not (tag == "footer")
 
 webloader = WebBaseLoader(
   web_paths=(
@@ -216,7 +226,7 @@ docs = webloader.load()
 # Alternatively, call add_documents() on the vector store directly.
 
 document_catalog = [] # List to hold document names, descriptions and metadata
-loaded_docs_by_title = {} # Dict to hold loaded documents by their title
+loaded_docs_by_source = {} # Dict to hold loaded documents by their source (link or filepath)
 
 for doc in docs:
     print("\n\n",doc.metadata.get("title"))
@@ -225,7 +235,7 @@ for doc in docs:
         "description": doc.metadata.get("description", "No description available."),
         "source": doc.metadata.get("source", "No source available."),
     })
-    loaded_docs_by_title[doc.metadata["title"]] = doc
+    loaded_docs_by_source[doc.metadata["source"]] = doc
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
 all_splits = text_splitter.split_documents(docs)
@@ -267,7 +277,7 @@ def addPdfToVectorStore(pdf_path: str, desc: str = ""):
         "description": desc,
         "source": doc[0].metadata.get("source", "No source available."),
     })
-  loaded_docs_by_title[doc[0].metadata["title"]] = doc
+  loaded_docs_by_source[doc[0].metadata["source"]] = doc
 
   # Add split documents to the vector store
   _ = vector_store.add_documents(all_splits)
@@ -292,7 +302,7 @@ document_catalog.append({
       "description": "Compiled customer information for Elina Example, containing her personal details, habits and preferences, Nordea service usage, account information, monthly spending, investments and property.",
       "source": "data/elina_example_persona.txt",
   })
-loaded_docs_by_title["Elina Example - Customer Information"] = doc
+loaded_docs_by_source["data/elina_example_persona.txt"] = doc
 
 # Add split documents to the vector store
 _ = vector_store.add_documents(all_splits)
@@ -312,19 +322,19 @@ def retrieve(query: str):
 
 @tool
 def list_documents() -> str:
-    """List all available documents with their metadata (title and description)."""
+    """List all available documents with their metadata (title, description, and source)."""
     response = "\n\n".join(
-        f"Title: {doc['title']}\nDescription: {doc['description']}"
+        f"Title: {doc['title']}\nDescription: {doc['description']}\nSource: {doc['source']}"
         for doc in document_catalog
     )
     return response
 
 @tool
-def read_document(doc_name: str) -> str:
-    """Read the full content of a selected document by Name."""
-    doc = loaded_docs_by_title.get(doc_name)
+def read_document(doc_source: str) -> str:
+    """Read the full content of a selected document by the source string."""
+    doc = loaded_docs_by_source.get(doc_source)
     if not doc:
-        return f"Document with Name '{doc_name}' not found."
+        return f"Document with source '{doc_source}' not found."
     
     return doc
 
