@@ -308,8 +308,8 @@ export default function Home() {
                 ) : null}
               </Fragment>
             ))}
+            {loading ? <div className="text-Nordea-dark-grey p-2">{t.thinking}</div> : null}
           </div>
-
           {error && <p className="text-red-600">Error: {error}</p>}
           <div className='flex flex-row gap-2 pt-6 max-w-full'>
             <div className='flex'>

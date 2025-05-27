@@ -4,13 +4,15 @@ export const translations = {
     intro: `I am Nia, your personal \nfinancial and banking AI-assistant \nhere at Nordea.`,
     inputPlaceholder: "Ask a question...",
     micWait: "Wait...",
-    micSpeak: "Listening..."
+    micSpeak: "Listening...",
+    thinking: "Thinking...",
   },
   FI: {
     greeting: "Moi Elina! \nMiten voisin sinua auttaa?",
     intro: `Olen Nia, henkilökohtainen \nrahoitus- ja pankkiasioiden \ntekoälyassistenttisi Nordeassa.`,
     inputPlaceholder: "Kirjoita kysymyksesi...",
     micWait: "Odota...",
-    micSpeak: "Voit nyt puhua..."
+    micSpeak: "Voit nyt puhua...",
+    thinking: "Mietin...",
   },
 };

@@ -1,6 +1,7 @@
 # Dynamic prompt: https://langchain-ai.github.io/langgraph/agents/agents/#__tabbed_1_2
 # TODO: Distinguish between user-specific RAG sources (invoices, data) and general documents (terms and conditions, service fees, etc.)
 # TODO: Add a tool to open links in a browser and read the content of the page.
+# In-memory database: https://python.langchain.com/docs/integrations/tools/sql_database/
 
 from fastapi import FastAPI, Request
 import os
@@ -12,9 +13,10 @@ from typing import Annotated
 from typing_extensions import TypedDict, List
 
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
-from langchain import hub
 from langchain.prompts import PromptTemplate
 from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
+from langchain_community.utilities.sql_database import SQLDatabase
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -41,6 +43,10 @@ from gtts import gTTS
 import base64
 from io import BytesIO
 from google.cloud import texttospeech
+import sqlite3
+import requests
+from sqlalchemy import create_engine
+from sqlalchemy.pool import StaticPool
 
 # Settings that affect the behavior/performance of the RAG system retrieval tool (but not listing/reading documents).
 CHUNK_SIZE = 1000  # Maximum size of a chunk in characters
@@ -75,6 +81,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Function to create an in-memory transaction history SQLite database. It is intended to be read-only.
+def get_engine_for_transaction_db():
+  """Load local SQL file, populate in-memory database, and create engine."""
+  sql_file_path = "data/transaction_history.sql"
+  with open(sql_file_path, "r", encoding="utf-8") as f:
+    sql_script = f.read()
+
+  connection = sqlite3.connect(":memory:", check_same_thread=False)
+  connection.executescript(sql_script)
+  return create_engine(
+    "sqlite://",
+    creator=lambda: connection,
+    poolclass=StaticPool,
+    connect_args={"check_same_thread": False},
+  )
+
+engine = get_engine_for_transaction_db()
+db = SQLDatabase(engine)
+
 class State(TypedDict):
     # Messages have the type "list". The `add_messages` function
     # in the annotation defines how this state key should be updated
@@ -97,6 +122,7 @@ llm = ChatGoogleGenerativeAI(
 
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 vector_store = InMemoryVectorStore(embeddings)
+toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 
 # System prompt (instructions for the LLM)
 # We can also have 2 separate prompts, e.g. voice and text
@@ -275,13 +301,14 @@ def read_document(doc_source: str) -> str:
     
     return doc
 
+# toolkit.get_tools() returns a list, so to flatten the tools list, use * unpacking:
 agent_executor = create_react_agent(
-    llm, 
-    [list_documents, read_document, retrieve], 
-    checkpointer=memory, 
+    llm,
+    [list_documents, read_document, retrieve, *toolkit.get_tools()],
+    checkpointer=memory,
     prompt=prompt,
     response_format=ResponseFormatter,
-    )
+  )
 
 def stream_graph_updates(user_input: str, id: str):
     for event in agent_executor.stream(
