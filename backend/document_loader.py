@@ -10,6 +10,7 @@ from bs4 import SoupStrainer, BeautifulSoup
 from dotenv import load_dotenv
 import time
 from typing import Optional
+import xml.etree.ElementTree as ET
 
 # Loading one document takes:
 # - From the web: around 0.65 seconds.
@@ -21,7 +22,23 @@ from typing import Optional
 CHUNK_SIZE = 1000  # Maximum size of a chunk in characters
 CHUNK_OVERLAP = 200 # Overlap between chunks in characters
 
+# Embeddings need credentials
+load_dotenv()
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+
+def extract_urls_from_local_sitemap(file_path):
+    tree = ET.parse(file_path)
+    root = tree.getroot()
+    namespace = {'ns': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+    urls = [elem.text for elem in root.findall('.//ns:loc', namespace)]
+    # TODO: Filter URLs to only include those related to personal banking. urls is a list of strings, so it should be easy to filter.
+    return urls
+
+sitemap_file = './data/sitemap.xml'  # Replace with your local sitemap file path
+web_paths = extract_urls_from_local_sitemap(sitemap_file)
 
 def extract_between_markers(text, start_marker, end_marker):
     start_index = text.find(start_marker)
@@ -29,11 +46,6 @@ def extract_between_markers(text, start_marker, end_marker):
     if start_index != -1 and end_index != -1 and start_index < end_index:
         return text[start_index + len(start_marker):end_index]
     return text
-
-# Embeddings need credentials
-load_dotenv()
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
 if os.path.exists("docs.json") and os.path.exists("chroma_db"):
   print("""
@@ -66,16 +78,7 @@ else:
     return str(soup)
 
   webloader = WebBaseLoader(
-    web_paths=(
-      "https://www.nordea.fi/henkiloasiakkaat/palvelumme/lainat/opintolaina/opintolainan-korko.html",
-      "https://www.nordea.fi/henkiloasiakkaat/palvelumme/lainat/asuntolainat/asuntolaina.html",
-      "https://www.nordea.fi/henkiloasiakkaat/sinun-elamasi/koti/ensimmaisen-kodin-ostaminen/",
-      "https://www.nordea.fi/en/personal/our-services/online-mobile-services/",
-      "https://www.nordea.fi/en/personal/our-services/online-mobile-services/mobile-banking/",
-      "https://www.nordea.fi/en/personal/our-services/loans/home-loans/asploan.html",
-      "https://www.nordea.fi/en/personal/our-services/savings-investments/savings-accounts/asp-account.html",
-      "https://www.nordea.fi/henkiloasiakkaat/sinun-elamasi/turvallisuus/jouduitko-huijatuksi.html"
-    ),
+    web_paths=web_paths,
     requests_per_second=1,
   )
   docs = webloader.load()
