@@ -17,6 +17,7 @@ from langchain.prompts import PromptTemplate
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
 from langchain_community.utilities.sql_database import SQLDatabase
+from langchain_community.vectorstores import Chroma
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -61,6 +62,9 @@ api_key = os.getenv("GEMINI_API_KEY")
 
 if not api_key:
     raise ValueError("Missing GEMINI_API_KEY in environment variables.")
+
+if not os.path.exists("docs.json") and not os.path.exists("chroma_db"):
+    raise FileNotFoundError("docs.json file and chroma_db not found. Please run the document_loader.py first!")
 
 # LangSmith tracing is a debugging and monitoring tool for LangChain applications. 
 # Not necessary to enable, but can help with understanding the flow application and diagnosing issues.
@@ -166,34 +170,14 @@ class ResponseFormatter(BaseModel):
 # TODO: Refactor the code to e.g. import links and use just one function that handles .html, .pdf and .txt file differences,
 # but has the overall same logic.
 
-# Parsing with BS4. Filters HTML elements, e.g. paragraphs, headers, lists, etc so that less relevant content is not included.
-# Here, we parse all elements except <footer class="footer"> by using SoupStrainer and a custom function.
-# Optimize later on to ignore repetitive elements like navigation bars, footers, etc.
-def exclude_footer(tag):
-    # Exclude <footer class="footer"> and <div class="nav">, include everything else
-    return not (tag == "footer")
-
-webloader = WebBaseLoader(
-  web_paths=(
-    "https://www.nordea.fi/henkiloasiakkaat/palvelumme/lainat/opintolaina/opintolainan-korko.html",
-    "https://www.nordea.fi/henkiloasiakkaat/palvelumme/lainat/asuntolainat/asuntolaina.html",
-    "https://www.nordea.fi/henkiloasiakkaat/sinun-elamasi/koti/ensimmaisen-kodin-ostaminen/",
-    "https://www.nordea.fi/en/personal/our-services/online-mobile-services/",
-    "https://www.nordea.fi/en/personal/our-services/online-mobile-services/mobile-banking/",
-    "https://www.nordea.fi/en/personal/our-services/loans/home-loans/asploan.html",
-    "https://www.nordea.fi/en/personal/our-services/savings-investments/savings-accounts/asp-account.html",
-    "https://www.nordea.fi/henkiloasiakkaat/sinun-elamasi/turvallisuus/jouduitko-huijatuksi.html"
-  ),
-  bs_kwargs=dict(
-    parse_only=SoupStrainer(exclude_footer)
-  ),
-)
-docs = webloader.load()
-# docs.append or docs.extend to add more documents, also from other sources like PDFs or text files.
-# Alternatively, call add_documents() on the vector store directly.
-
 document_catalog = [] # List to hold document names, descriptions and metadata
 loaded_docs_by_source = {} # Dict to hold loaded documents by their source (link or filepath)
+
+# Load previously parsed Web documents from local persistent storage.
+with open("docs.json", "r", encoding="utf-8") as f:
+    docs = [Document(**doc) for doc in json.load(f)]
+
+print(f"Loaded {len(docs)} documents from 'docs.json'.\n\n")
 
 for doc in docs:
     print("\n\n",doc.metadata.get("title"))
@@ -204,25 +188,12 @@ for doc in docs:
     })
     loaded_docs_by_source[doc.metadata["source"]] = doc
 
+vector_store = Chroma(
+    embedding_function=embeddings,
+    persist_directory="./chroma_db"
+  )
+
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
-all_splits = text_splitter.split_documents(docs)
-
-# Update metadata (illustration purposes)
-total_documents = len(all_splits)
-third = total_documents // 3
-
-for i, document in enumerate(all_splits):
-    if i < third:
-        document.metadata["section"] = "beginning"
-    elif i < 2 * third:
-        document.metadata["section"] = "middle"
-    else:
-        document.metadata["section"] = "end"
-
-
-# Index chunks
-vector_store = InMemoryVectorStore(embeddings)
-_ = vector_store.add_documents(all_splits)
 
 def addPdfToVectorStore(pdf_path: str, desc: str = ""):
   """Load a PDF file and add its contents to the vector store, with an optional description."""

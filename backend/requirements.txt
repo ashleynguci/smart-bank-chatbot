@@ -1,5 +1,6 @@
 SpeechRecognition
 PyPDF2
+chromadb
 fastapi
 google
 google-api-python-client
@@ -16,6 +17,7 @@ langchain-text-splitters
 langchainhub
 langgraph
 langsmith
+lxml
 pdfplumber
 pygame
 pyaudio
