@@ -1,3 +1,6 @@
+
+# Customer information for Elina Example
+
 Persona: Elina Example
 Age: 29
 Location: Helsinki, Finland

@@ -124,9 +124,13 @@ embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 vector_store = InMemoryVectorStore(embeddings)
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 
+# Read example customer information for Elina Example
+with open("data/elina_example_persona.txt", "r") as f:
+    elina_example_persona = f.read()
+
 # System prompt (instructions for the LLM)
 # We can also have 2 separate prompts, e.g. voice and text
-prompt = SYSTEM_PROMPT
+prompt = SYSTEM_PROMPT + elina_example_persona
 formatter_prompt = FORMATTER_PROMPT
 
 class ResponseItem(BaseModel):
@@ -254,21 +258,22 @@ pdfs_with_desc = [
 for pdf_path, desc in pdfs_with_desc:
   addPdfToVectorStore(pdf_path, desc)
 
-loader = TextLoader("data/elina_example_persona.txt")
-
-doc = loader.load()
-
-all_splits = text_splitter.split_documents(doc)
-
-document_catalog.append({
-      "title": "Elina Example - Customer Information",
-      "description": "Compiled customer information for Elina Example, containing her personal details, habits and preferences, Nordea service usage, account information, monthly spending, investments and property.",
-      "source": "data/elina_example_persona.txt",
-  })
-loaded_docs_by_source["data/elina_example_persona.txt"] = doc
-
-# Add split documents to the vector store
-_ = vector_store.add_documents(all_splits)
+# Customer information already in the context
+# loader = TextLoader("data/elina_example_persona.txt")
+#
+# doc = loader.load()
+#
+# all_splits = text_splitter.split_documents(doc)
+#
+# document_catalog.append({
+#       "title": "Elina Example - Customer Information",
+#       "description": "Compiled customer information for Elina Example, containing her personal details, habits and preferences, Nordea service usage, account information, monthly spending, investments and property.",
+#       "source": "data/elina_example_persona.txt",
+#   })
+# loaded_docs_by_source["data/elina_example_persona.txt"] = doc
+#
+# # Add split documents to the vector store
+# _ = vector_store.add_documents(all_splits)
 
 print("Finished loading and indexing documents into the vector store.")
 
