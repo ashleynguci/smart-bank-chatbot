@@ -6,10 +6,10 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.document_loaders import SitemapLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from bs4 import SoupStrainer
+from bs4 import SoupStrainer, BeautifulSoup
 from dotenv import load_dotenv
 import time
-from typing_extensions import TypedDict, List
+from typing import Optional
 
 # Loading one document takes:
 # - From the web: around 0.65 seconds.
@@ -23,9 +23,12 @@ CHUNK_OVERLAP = 200 # Overlap between chunks in characters
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
 
-def exclude_footer(tag):
-    # Exclude <footer class="footer"> and <div class="nav">, include everything else
-    return not (tag == "footer")
+def extract_between_markers(text, start_marker, end_marker):
+    start_index = text.find(start_marker)
+    end_index = text.rfind(end_marker)
+    if start_index != -1 and end_index != -1 and start_index < end_index:
+        return text[start_index + len(start_marker):end_index]
+    return text
 
 # Embeddings need credentials
 load_dotenv()
@@ -56,8 +59,13 @@ else:
   #   is_local=True,
   #   )
 
+  def remove_navigation_divs(html_content):
+    soup = BeautifulSoup(html_content, "html.parser")
+    for nav_div in soup.find_all("div", attrs={"role": "navigation"}):
+        nav_div.decompose()
+    return str(soup)
+
   webloader = WebBaseLoader(
-    # TODO: Load links from a separate file instead of hardcoding them (Use the sitemap.xml here?)
     web_paths=(
       "https://www.nordea.fi/henkiloasiakkaat/palvelumme/lainat/opintolaina/opintolainan-korko.html",
       "https://www.nordea.fi/henkiloasiakkaat/palvelumme/lainat/asuntolainat/asuntolaina.html",
@@ -68,11 +76,17 @@ else:
       "https://www.nordea.fi/en/personal/our-services/savings-investments/savings-accounts/asp-account.html",
       "https://www.nordea.fi/henkiloasiakkaat/sinun-elamasi/turvallisuus/jouduitko-huijatuksi.html"
     ),
-    requests_per_second=1
+    requests_per_second=1,
   )
   docs = webloader.load()
 
-  print(docs[0])
+  for doc in docs:
+    if doc.metadata["language"] == "fi-FI":
+      # Meaningful content in Finnish pages is between instances of "Asiakas- palvelu" and "Jaa tämä sivu"
+      doc.page_content = extract_between_markers(doc.page_content, "Asiakas- palvelu", "Jaa tämä sivu")
+    else:
+      # In English pages, the content is between "SearchSuomiSvenskaEnglish" and "Share this page".
+      doc.page_content = extract_between_markers(doc.page_content, "SearchSuomiSvenskaEnglish", "Share this page")
   
   # Save documents
   with open("docs.json", "w", encoding="utf-8") as f:
