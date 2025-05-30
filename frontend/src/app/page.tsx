@@ -265,16 +265,19 @@ export default function Home() {
                           <a className="border px-4 p-2 rounded-3xl bg-white shadow-sm" href={item.url} target="_blank" rel="noopener noreferrer">{`📎 ${item.label}`}</a>
                         </div>
                       ) : (
-                        <span key={i} className="gap-1 bg-white rounded-xl px-2 mx-1">
-                        <a
-                          href={item.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-Nordea-accent-2 underline text-sm"
-                        >
-                          {item.label}
-                        </a>
-                        </span>
+                        <>
+                          <br/>
+                          <span key={i} className="gap-1 bg-white rounded-xl px-2 mx-1">
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-Nordea-accent-2 underline text-sm"
+                          >
+                            {item.label}
+                          </a>
+                          </span>
+                        </>
                       );
                     case 'attachment':
                       return (

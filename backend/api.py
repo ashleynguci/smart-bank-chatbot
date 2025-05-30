@@ -53,6 +53,8 @@ from sqlalchemy.pool import StaticPool
 CHUNK_SIZE = 1000  # Maximum size of a chunk in characters
 CHUNK_OVERLAP = 200  # Overlap between chunks in characters
 RETRIEVED_DOCS_AMOUNT = 20 # Number of documents to retrieve for each query. The more documents, the more spent tokens, but also more accurate responses, and the more context for the LLM to use.
+JSON_PATH = "docs.json"  # Path to the JSON file with documents
+CHROMA_DB_PATH = "./chroma_db"  # Path to the Chroma DB directory
 
 # Load env vars
 load_dotenv()
@@ -63,8 +65,8 @@ api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise ValueError("Missing GEMINI_API_KEY in environment variables.")
 
-if not os.path.exists("docs.json") and not os.path.exists("chroma_db"):
-    raise FileNotFoundError("docs.json file and chroma_db not found. Please run the document_loader.py first!")
+if not os.path.exists(JSON_PATH) or not os.path.exists(CHROMA_DB_PATH):
+    raise FileNotFoundError(f"{JSON_PATH} file or {CHROMA_DB_PATH} not found. Please run the 'backend/document_loader.py' script first!")
 
 # LangSmith tracing is a debugging and monitoring tool for LangChain applications. 
 # Not necessary to enable, but can help with understanding the flow application and diagnosing issues.
@@ -174,10 +176,10 @@ document_catalog = [] # List to hold document names, descriptions and metadata
 loaded_docs_by_source = {} # Dict to hold loaded documents by their source (link or filepath)
 
 # Load previously parsed Web documents from local persistent storage.
-with open("docs.json", "r", encoding="utf-8") as f:
+with open(JSON_PATH, "r", encoding="utf-8") as f:
     docs = [Document(**doc) for doc in json.load(f)]
 
-print(f"Loaded {len(docs)} documents from 'docs.json'.\n\n")
+print(f"Loaded {len(docs)} documents from '{JSON_PATH}'.\n\n")
 
 for doc in docs:
     print("\n\n",doc.metadata.get("title"))
@@ -190,7 +192,7 @@ for doc in docs:
 
 vector_store = Chroma(
     embedding_function=embeddings,
-    persist_directory="./chroma_db"
+    persist_directory=CHROMA_DB_PATH
   )
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
