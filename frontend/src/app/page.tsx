@@ -237,7 +237,7 @@ export default function Home() {
         <div className="flex flex-col gap-2 w-full items-center">
           {/* Message log */}
           <div
-            className="flex flex-col gap-2 max-md:w-full md:w-96 max-h-96 overflow-y-scroll"
+            className="flex flex-col gap-2 max-md:w-full md:w-[600px] max-h-96 overflow-y-scroll"
             ref={messageLogRef}
             style={{
               scrollbarWidth: messages.length > 5 ? 'auto' : 'none', // Chrome, Firefox, Safari, Edge
@@ -265,19 +265,19 @@ export default function Home() {
                           <a className="border px-4 p-2 rounded-3xl bg-white shadow-sm" href={item.url} target="_blank" rel="noopener noreferrer">{`📎 ${item.label}`}</a>
                         </div>
                       ) : (
-                        <>
+                        <Fragment key={idx + 'link'}>
                           <br/>
                           <span key={i} className="gap-1 bg-white rounded-xl px-2 mx-1">
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-Nordea-accent-2 underline text-sm"
-                          >
-                            {item.label}
-                          </a>
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-Nordea-accent-2 underline text-sm"
+                            >
+                              {item.label}
+                            </a>
                           </span>
-                        </>
+                        </Fragment>
                       );
                     case 'attachment':
                       return (
@@ -324,7 +324,7 @@ export default function Home() {
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={loading}
-              className="bg-Nordea-light-grey pl-4 lg:w-80 pr-14 rounded-full text-Nordea-text-dark-blue disabled:opacity-50"
+              className="bg-Nordea-light-grey pl-4 md:w-96 pr-14 rounded-full text-Nordea-text-dark-blue disabled:opacity-50"
             />
             <button
               onClick={() => handleMicrophoneClick()}
