@@ -4,10 +4,8 @@ notes.txt
 text-to-speech-credentials.json
 
 docs*
-!docs.json
 
 *.xml
 !sitemap_example.xml
 
-chroma_db
 chroma_db*
