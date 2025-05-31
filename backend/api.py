@@ -128,7 +128,6 @@ llm = ChatGoogleGenerativeAI(
 )
 
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-vector_store = InMemoryVectorStore(embeddings)
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 
 # Read example customer information for Elina Example
@@ -211,7 +210,7 @@ def addPdfToVectorStore(pdf_path: str, desc: str = ""):
   
   # Split the documents
   text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
-  all_splits = text_splitter.split_documents(docs)
+  all_splits = text_splitter.split_documents(doc)
 
   document_catalog.append({
         "title": doc[0].metadata.get("title"),
