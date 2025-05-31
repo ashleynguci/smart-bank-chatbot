@@ -48,13 +48,14 @@ import sqlite3
 import requests
 from sqlalchemy import create_engine
 from sqlalchemy.pool import StaticPool
+import re
 
 # Settings that affect the behavior/performance of the RAG system retrieval tool (but not listing/reading documents).
 CHUNK_SIZE = 1000  # Maximum size of a chunk in characters
 CHUNK_OVERLAP = 200  # Overlap between chunks in characters
 RETRIEVED_DOCS_AMOUNT = 20 # Number of documents to retrieve for each query. The more documents, the more spent tokens, but also more accurate responses, and the more context for the LLM to use.
-JSON_PATH = "docs.json"  # Path to the JSON file with documents
-CHROMA_DB_PATH = "./chroma_db"  # Path to the Chroma DB directory
+JSON_PATH = "docs_en.json"  # Path to the JSON file with documents
+CHROMA_DB_PATH = "./chroma_db_en"  # Path to the Chroma DB directory
 
 # Load env vars
 load_dotenv()
@@ -119,7 +120,7 @@ graph_builder = StateGraph(State)
 # Init LLM
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.0-flash",
-    temperature=1.0,
+    temperature=1.2,
     max_tokens=None,
     timeout=None,
     max_retries=2,
@@ -182,7 +183,7 @@ with open(JSON_PATH, "r", encoding="utf-8") as f:
 print(f"Loaded {len(docs)} documents from '{JSON_PATH}'.\n\n")
 
 for doc in docs:
-    print("\n\n",doc.metadata.get("title"))
+    #print("\n\n",doc.metadata.get("title"))
     document_catalog.append({
         "title": doc.metadata.get("title"),
         "description": doc.metadata.get("description", "No description available."),
@@ -310,8 +311,22 @@ class ChatInput(BaseModel):
     langCode: str
 
 def text_to_base64_audio(text: str, lang: str = "en-US") -> str:
+    # Remove emojis and asterisks from the text
+    emoji_pattern = re.compile(
+      "[" 
+      "\U0001F600-\U0001F64F"  # emoticons
+      "\U0001F300-\U0001F5FF"  # symbols & pictographs
+      "\U0001F680-\U0001F6FF"  # transport & map symbols
+      "\U0001F1E0-\U0001F1FF"  # flags (iOS)
+      "\U00002700-\U000027BF"  # Dingbats
+      "\U000024C2-\U0001F251"
+      "]",
+      flags=re.UNICODE,
+    )
+    filtered_text = emoji_pattern.sub(r'', text)
+    filtered_text = filtered_text.replace("*", "")
     client = texttospeech.TextToSpeechClient()
-    synthesis_input = texttospeech.SynthesisInput(text=text)
+    synthesis_input = texttospeech.SynthesisInput(text=filtered_text)
     voice = texttospeech.VoiceSelectionParams(
         language_code=lang,
         name="en-US-Chirp3-HD-Achernar", # Try other voices as well!

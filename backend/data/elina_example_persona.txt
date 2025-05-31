@@ -12,11 +12,17 @@ Elina values good food, self-care, and the occasional weekend getaway. She’s g
 Nordea service usage:
 - Is a Mobile Plus package customer, and has a mobile bank, an account and a card.
 
-Accounts:
-- Bank account: €14,700
-- Credit Card (Nordea Gold): €1,200 
-- Investments account: €4,200
-- Student Loan (Kela): €6,800
+Current balance - Accounts and cards:
+- Bank account (Current account balance for daily banking): €14,700
+- Credit Card (Nordea Gold, total amount owed): €1,200 
+- Student Loan (backed by Kela): 
+    Total Amount Borrowed: €16,800
+    Outstanding Balance (Unpaid): €11,569
+    Repayment Method: Monthly direct debit from main bank account
+    Repayment Schedule: Annuity method, repayment has begun
+    Monthly Payment: €330
+    Interest Rate: 1.5%
+    Current Status: In repayment
 - ASP account savings: €4,300
 
 Monthly Spending (Average):
@@ -41,5 +47,5 @@ Property:
 
 Yearly Summary:
 - Net Salary: €36,000
-- Expenses (incl. rent): ~€30,960
-- Net Surplus: ~€5040
+- Average Expenses (incl. rent): ~€30,960
+- Average Net Surplus: ~€5040

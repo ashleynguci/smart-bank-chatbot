@@ -237,7 +237,7 @@ export default function Home() {
         <div className="flex flex-col gap-2 w-full items-center">
           {/* Message log */}
           <div
-            className="flex flex-col gap-2 max-md:w-full md:w-[600px] max-h-96 overflow-y-scroll"
+            className="flex flex-col gap-2 max-md:w-full md:w-[600px] max-h-[500px] overflow-y-scroll"
             ref={messageLogRef}
             style={{
               scrollbarWidth: messages.length > 5 ? 'auto' : 'none', // Chrome, Firefox, Safari, Edge
