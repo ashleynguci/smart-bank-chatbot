@@ -140,6 +140,8 @@ export default function Home() {
     if (messageLogRef.current) {
       messageLogRef.current.scrollTop = messageLogRef.current.scrollHeight;
     }
+    // Scroll the entire page to the bottom to ensure input and buttons are visible
+    //window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   }, [messages]);
 
   const {
@@ -240,7 +242,9 @@ export default function Home() {
     <div className="items-center justify-items-center min-h-screen p-8 py-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-6 row-start-2 items-center">
         <div className="text-2xl sm:text-4xl font-normal tracking-[-.01em] text-center text-Nordea-text-dark-blue">
-          <h1>{t.greeting.split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}</h1> 
+          {messages.length === 0 && (
+            <h1>{t.greeting.split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}</h1> 
+          )}
         </div>
         {messages.length === 0 && (
           <p className="text-md text-center font-normal text-Nordea-dark-grey">
@@ -252,7 +256,7 @@ export default function Home() {
         <div className="flex flex-col gap-2 w-full items-center">
           {/* Message log */}
           <div
-            className="flex flex-col gap-2 max-md:w-full md:w-[600px] max-h-[500px] overflow-y-scroll"
+            className="flex flex-col gap-2 max-md:w-full md:w-[600px] max-h-[450px] md:max-h-[500px] overflow-y-scroll"
             ref={messageLogRef}
             style={{
               scrollbarWidth: messages.length > 5 ? 'auto' : 'none', // Chrome, Firefox, Safari, Edge
