@@ -221,6 +221,21 @@ export default function Home() {
     }
   }
 
+  // Helper to parse **bold** in text and render as <span className="font-bold">
+  function renderWithBold(text: string) {
+    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, idx) => {
+    if (/^\*\*[^*]+\*\*$/.test(part)) {
+      return (
+      <span key={idx} className="font-bold">
+        {part.slice(2, -2)}
+      </span>
+      );
+    }
+    return <span key={idx}>{part}</span>;
+    });
+  }
+
   return (
     <div className="items-center justify-items-center min-h-screen p-8 py-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-6 row-start-2 items-center">
@@ -256,7 +271,7 @@ export default function Home() {
                   {msg.content.map((item, i) => {
                     switch (item.type) {
                       case 'text':
-                        return <span key={i}>{item.content+" "}</span>;
+                        return <span key={i}>{renderWithBold(item.content)} </span>;
                       case 'link':
                       // Check if the link is a PDF
                       const isPdf = item.url.toLowerCase().endsWith('.pdf');

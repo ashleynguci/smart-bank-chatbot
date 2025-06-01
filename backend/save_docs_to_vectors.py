@@ -10,8 +10,8 @@ from langchain_community.vectorstores import Chroma
 from dotenv import load_dotenv
 import time
 
-JSON_FILE = "docs_en_full.json" # Set path to Document JSON file
-NEW_DB_DIR = "./chroma_db_updated" # Directory to store the updated vector store
+JSON_FILE = "docs_en.json" # Set path to Document JSON file
+NEW_DB_DIR = "./chroma_db_en" # Directory to store the updated vector store
 CHUNK_SIZE = 1000  # Maximum size of a chunk in characters
 CHUNK_OVERLAP = 200 # Overlap between chunks in characters
 

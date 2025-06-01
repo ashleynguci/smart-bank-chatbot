@@ -1,4 +1,5 @@
 # Dynamic prompt: https://langchain-ai.github.io/langgraph/agents/agents/#__tabbed_1_2
+# TODO: Handle PDFs and TXT files in the same way as Web pages, so that they can also be stored persistent vector store (No need to embed them on startup)
 # TODO: Distinguish between user-specific RAG sources (invoices, data) and general documents (terms and conditions, service fees, etc.)
 # TODO: Add a tool to open links in a browser and read the content of the page.
 # In-memory database: https://python.langchain.com/docs/integrations/tools/sql_database/
