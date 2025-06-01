@@ -275,7 +275,7 @@ export default function Home() {
                   {msg.content.map((item, i) => {
                     switch (item.type) {
                       case 'text':
-                        return <span key={i}>{renderWithBold(item.content)} </span>;
+                        return <span key={i}>{renderWithBold(item.content)} </span>
                       case 'link':
                       // Check if the link is a PDF
                       const isPdf = item.url.toLowerCase().endsWith('.pdf');
@@ -284,7 +284,7 @@ export default function Home() {
                           <a className="border px-4 p-2 rounded-3xl bg-white shadow-sm" href={item.url} target="_blank" rel="noopener noreferrer">{`📎 ${item.label}`}</a>
                         </div>
                       ) : (
-                        <Fragment key={idx + 'link'}>
+                        <Fragment key={i + 'link'}>
                           <br/>
                           <span key={i} className="gap-1 bg-white rounded-xl px-2 mx-1">
                             <a
@@ -333,6 +333,9 @@ export default function Home() {
             {loading ? <div className="text-Nordea-dark-grey p-2">{t.thinking}</div> : null}
           </div>
           {error && <p className="text-red-600">Error: {error}</p>}
+          {messages.length > 11 && (
+            <p className='-mb-4 text-sm text-center font-normal text-Nordea-dark-grey'><span className='font-bold'>{t.note}</span> {t.tokenWarning.split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}</p> 
+          )}
           <div className='flex flex-row gap-2 pt-6 max-w-full'>
             <div className='flex'>
             <input
